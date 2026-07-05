@@ -1,0 +1,29 @@
+# Render Blueprint — AnimeVerse API (NestJS)
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: animeverse-api
+    runtime: node
+    region: virginia
+    plan: free
+    rootDir: server
+    buildCommand: npm install && npx prisma generate && npm run build
+    preDeployCommand: npx prisma migrate deploy
+    startCommand: npm run start:prod
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGINS
+        value: https://anime-verse-khaki.vercel.app,http://localhost:3000
+      - key: JWT_ACCESS_TTL
+        value: 900s
+      - key: JWT_REFRESH_TTL
+        value: 7d
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_ACCESS_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
