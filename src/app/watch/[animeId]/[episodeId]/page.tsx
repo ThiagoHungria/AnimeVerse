@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -13,6 +13,7 @@ import {
 import { useAnime } from "@/features/anime/hooks/useAnimeQueries";
 import { useHistoryStore } from "@/store/history.store";
 import { syncHistoryAction } from "@/services/syncService";
+import { useGamificationStore } from "@/store/gamification.store";
 import { VideoPlayer } from "@/components/player/VideoPlayer";
 import { EpisodeList } from "@/features/anime/components/EpisodeList";
 import { Skeleton } from "@/components/ui/Skeleton";
@@ -29,9 +30,12 @@ export default function WatchPage() {
   const record = useHistoryStore((s) => s.record);
   const updateProgress = useHistoryStore((s) => s.updateProgress);
   const entries = useHistoryStore((s) => s.entries);
+  const recordWatch = useGamificationStore((s) => s.recordWatch);
+  const completedRef = useRef(false);
 
   // Capture the resume position once, before we upsert the history entry.
   const startTimeRef = useRef<number>(0);
+  const [resumeTime, setResumeTime] = useState(0);
   const recordedKey = useRef<string | null>(null);
 
   const episode = anime?.episodes.find((e) => e.id === episodeId) ?? null;
@@ -59,6 +63,7 @@ export default function WatchPage() {
       (e) => e.animeId === anime.id && e.episodeId === episode.id,
     );
     startTimeRef.current = existing?.progress ?? 0;
+    setResumeTime(existing?.progress ?? 0);
 
     record({
       animeId: anime.id,
@@ -82,7 +87,9 @@ export default function WatchPage() {
       duration: existing?.duration ?? episode.duration ?? 0,
       updatedAt: Date.now(),
     });
-  }, [anime, episode, entries, record]);
+    recordWatch(anime.id, episode.id, false);
+    completedRef.current = false;
+  }, [anime, episode, entries, record, recordWatch]);
 
   if (isLoading) return <WatchSkeleton />;
 
@@ -122,9 +129,13 @@ export default function WatchPage() {
               key={episode.id}
               src={episode.videoUrl}
               poster={episode.thumbnail}
-              startTime={startTimeRef.current}
+              startTime={resumeTime}
               onProgress={(time, duration) => {
                 updateProgress(anime.id, episode.id, time, duration);
+                if (duration > 0 && time / duration >= 0.85 && !completedRef.current) {
+                  completedRef.current = true;
+                  recordWatch(anime.id, episode.id, true);
+                }
                 syncHistoryAction({
                   animeId: anime.id,
                   episodeId: episode.id,

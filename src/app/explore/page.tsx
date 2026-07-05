@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Compass, Flame, SearchX } from "lucide-react";
+import { useGamificationStore } from "@/store/gamification.store";
 import { AnimeCarousel } from "@/features/anime/components/AnimeCarousel";
 import { AnimeCard } from "@/features/anime/components/AnimeCard";
 import { CarouselSkeleton, GridSkeleton } from "@/components/ui/LoadingSkeleton";
@@ -16,6 +17,11 @@ import type { DiscoverFilters } from "@/services/animeService";
 export default function ExplorePage() {
   const [filters, setFilters] = useState<DiscoverFilters>({});
   const active = hasActiveFilters(filters);
+  const recordExplore = useGamificationStore((s) => s.recordExplore);
+
+  useEffect(() => {
+    if (active) recordExplore();
+  }, [active, recordExplore]);
 
   const { data: genres } = useGenres();
   const { data: results, isFetching } = useDiscover(filters, active);

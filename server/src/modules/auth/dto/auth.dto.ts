@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+export const googleSchema = z.object({
+  idToken: z.string().min(1),
+});
+
+export type GoogleDto = z.infer<typeof googleSchema>;
+
 export const registerSchema = z.object({
   name: z.string().min(2).max(80),
   email: z.string().email(),

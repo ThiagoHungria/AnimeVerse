@@ -7,10 +7,13 @@ import { LogIn, UserPlus, Loader2 } from "lucide-react";
 import { apiClient } from "@/services/apiClient";
 import { syncUserData } from "@/services/syncService";
 import { useAuthStore } from "@/store/auth.store";
+import { useGamificationStore } from "@/store/gamification.store";
+import { GoogleSignInButton } from "@/features/auth/components/GoogleSignInButton";
 
 export default function LoginPage() {
   const router = useRouter();
   const login = useAuthStore((s) => s.login);
+  const recordDailyActivity = useGamificationStore((s) => s.recordDailyActivity);
   const [mode, setMode] = useState<"login" | "register">("login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -31,6 +34,7 @@ export default function LoginPage() {
         accessToken: res.accessToken,
         refreshToken: res.refreshToken,
       });
+      recordDailyActivity();
       await syncUserData();
       router.push("/profile");
     } catch (err: unknown) {
@@ -108,6 +112,8 @@ export default function LoginPage() {
             )}
           </button>
         </form>
+
+        <GoogleSignInButton />
 
         <p className="text-muted mt-4 text-center text-sm">
           {mode === "login" ? "Não tem conta?" : "Já tem conta?"}{" "}

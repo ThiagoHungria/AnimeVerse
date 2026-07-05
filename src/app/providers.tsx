@@ -2,7 +2,12 @@
 
 import { useState, type ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { SyncOnAuth } from "@/components/sync/SyncOnAuth";
+import { AchievementToast } from "@/features/gamification/components/AchievementToast";
+import { GamificationBoot } from "@/features/gamification/components/GamificationBoot";
+
+const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
 /**
  * App-wide client providers. The QueryClient is created lazily inside state so
@@ -22,10 +27,20 @@ export function Providers({ children }: { children: ReactNode }) {
       }),
   );
 
-  return (
+  const tree = (
     <QueryClientProvider client={client}>
+      <GamificationBoot />
       <SyncOnAuth />
+      <AchievementToast />
       {children}
     </QueryClientProvider>
   );
+
+  if (GOOGLE_CLIENT_ID) {
+    return (
+      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>{tree}</GoogleOAuthProvider>
+    );
+  }
+
+  return tree;
 }

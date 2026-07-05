@@ -26,3 +26,5 @@ services:
         sync: false
       - key: JWT_REFRESH_SECRET
         sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false

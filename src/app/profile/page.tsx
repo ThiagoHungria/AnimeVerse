@@ -9,6 +9,7 @@ import { useRecommended } from "@/features/recommendations/hooks/useRecommendati
 import { AnimeCard } from "@/features/anime/components/AnimeCard";
 import { GridSkeleton } from "@/components/ui/LoadingSkeleton";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { GamificationPanel } from "@/features/gamification/components/GamificationPanel";
 import { cn } from "@/utils/cn";
 
 export default function ProfilePage() {
@@ -82,6 +83,8 @@ export default function ProfilePage() {
           })}
         </div>
       </section>
+
+      <GamificationPanel />
 
       {/* Learned interests */}
       {hydrated && topInterests.length > 0 && (

@@ -6,6 +6,7 @@ import { useFavoritesStore } from "@/store/favorites.store";
 import { useProfileStore } from "@/store/profile.store";
 import { useHydrated } from "@/hooks/useHydrated";
 import { syncFavoriteAction } from "@/services/syncService";
+import { useGamificationStore } from "@/store/gamification.store";
 import { cn } from "@/utils/cn";
 
 interface FavoriteButtonProps {
@@ -24,6 +25,7 @@ export function FavoriteButton({
   const toggle = useFavoritesStore((s) => s.toggle);
   const items = useFavoritesStore((s) => s.items);
   const recordFavorite = useProfileStore((s) => s.recordFavorite);
+  const gamifyFavorite = useGamificationStore((s) => s.recordFavorite);
   const active = hydrated && items.some((a) => a.id === anime.id);
 
   const handleClick = (e: React.MouseEvent) => {
@@ -36,6 +38,7 @@ export function FavoriteButton({
         ...anime.themes,
         ...anime.demographics,
       ]);
+      gamifyFavorite();
     }
     toggle(anime);
     syncFavoriteAction(anime, !active);

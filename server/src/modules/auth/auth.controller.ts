@@ -4,6 +4,8 @@ import {
   loginSchema,
   refreshSchema,
   registerSchema,
+  googleSchema,
+  type GoogleDto,
   type LoginDto,
   type RefreshDto,
   type RegisterDto,
@@ -32,5 +34,10 @@ export class AuthController {
   @Post("logout")
   logout(@Body(new ZodValidationPipe(refreshSchema)) dto: RefreshDto) {
     return this.auth.logout(dto.refreshToken);
+  }
+
+  @Post("google")
+  google(@Body(new ZodValidationPipe(googleSchema)) dto: GoogleDto) {
+    return this.auth.googleLogin(dto);
   }
 }

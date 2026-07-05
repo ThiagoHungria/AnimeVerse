@@ -2,13 +2,15 @@ import {
   ConflictException,
   Injectable,
   UnauthorizedException,
+  BadRequestException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { randomBytes } from "crypto";
 import * as bcrypt from "bcryptjs";
+import { OAuth2Client } from "google-auth-library";
 import { PrismaService } from "../../prisma/prisma.service";
-import type { LoginDto, RefreshDto, RegisterDto } from "./dto/auth.dto";
+import type { GoogleDto, LoginDto, RefreshDto, RegisterDto } from "./dto/auth.dto";
 
 export interface TokenPair {
   accessToken: string;
@@ -48,7 +50,9 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email.toLowerCase() },
     });
-    if (!user) throw new UnauthorizedException("Invalid credentials");
+    if (!user || !user.passwordHash) {
+      throw new UnauthorizedException("Invalid credentials");
+    }
 
     const valid = await bcrypt.compare(dto.password, user.passwordHash);
     if (!valid) throw new UnauthorizedException("Invalid credentials");
@@ -86,6 +90,60 @@ export class AuthService {
   async logout(refreshToken: string) {
     await this.prisma.refreshToken.deleteMany({ where: { token: refreshToken } });
     return { success: true };
+  }
+
+  async googleLogin(dto: GoogleDto) {
+    const clientId = this.config.get<string>("GOOGLE_CLIENT_ID");
+    if (!clientId) {
+      throw new BadRequestException("Google login is not configured");
+    }
+
+    const client = new OAuth2Client(clientId);
+    const ticket = await client.verifyIdToken({
+      idToken: dto.idToken,
+      audience: clientId,
+    });
+    const payload = ticket.getPayload();
+    if (!payload?.email || !payload.sub) {
+      throw new UnauthorizedException("Invalid Google token");
+    }
+
+    const email = payload.email.toLowerCase();
+    let user = await this.prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      user = await this.prisma.user.create({
+        data: {
+          name: payload.name ?? payload.email.split("@")[0] ?? "Usuário",
+          email,
+          avatar: payload.picture ?? null,
+          provider: "google",
+          oauthId: payload.sub,
+          preferences: { create: {} },
+        },
+      });
+    } else if (user.provider === "local" && !user.oauthId) {
+      user = await this.prisma.user.update({
+        where: { id: user.id },
+        data: {
+          provider: "google",
+          oauthId: payload.sub,
+          avatar: user.avatar ?? payload.picture ?? null,
+        },
+      });
+    }
+
+    const tokens = await this.issueTokens(user.id, user.email, user.name);
+    return {
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar,
+        createdAt: user.createdAt,
+      },
+      ...tokens,
+    };
   }
 
   private async issueTokens(

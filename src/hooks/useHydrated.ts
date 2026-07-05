@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
-/**
- * Returns true once the component has mounted on the client.
- * Use it to gate rendering of LocalStorage-backed UI (favorites/history)
- * so SSR markup matches the first client render.
- */
+/** True after the client has mounted (avoids SSR/localStorage hydration mismatches). */
 export function useHydrated(): boolean {
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => setHydrated(true), []);
-  return hydrated;
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 }

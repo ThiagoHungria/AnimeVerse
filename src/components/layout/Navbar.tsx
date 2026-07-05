@@ -19,6 +19,7 @@ import {
 import { cn } from "@/utils/cn";
 import { useAuthStore } from "@/store/auth.store";
 import { useHydrated } from "@/hooks/useHydrated";
+import { XpIndicator } from "@/features/gamification/components/XpIndicator";
 
 const NAV_LINKS = [
   { href: "/", label: "Início", icon: Home },
@@ -95,6 +96,7 @@ export function Navbar() {
 
         {/* Auth (desktop) */}
         <div className="hidden items-center gap-2 md:flex">
+          <XpIndicator />
           {hydrated && user ? (
             <>
               <span className="text-muted-strong max-w-24 truncate text-sm">

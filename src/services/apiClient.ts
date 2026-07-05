@@ -1,6 +1,40 @@
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
 
+const RETRYABLE_STATUS = new Set([502, 503, 504]);
+const MAX_RETRIES = 3;
+const RETRY_DELAY_MS = 2500;
+
+async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit,
+): Promise<Response> {
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+    try {
+      const res = await fetch(url, options);
+      if (RETRYABLE_STATUS.has(res.status) && attempt < MAX_RETRIES - 1) {
+        await sleep(RETRY_DELAY_MS * (attempt + 1));
+        continue;
+      }
+      return res;
+    } catch (err) {
+      lastError = err;
+      if (attempt < MAX_RETRIES - 1) {
+        await sleep(RETRY_DELAY_MS * (attempt + 1));
+        continue;
+      }
+    }
+  }
+
+  throw lastError ?? new Error("Network request failed");
+}
+
 export interface ApiError {
   message: string;
   statusCode: number;
@@ -29,7 +63,7 @@ export class ApiClient {
       headers.Authorization = `Bearer ${this.accessToken}`;
     }
 
-    const res = await fetch(`${API_URL}${path}`, {
+    const res = await fetchWithRetry(`${API_URL}${path}`, {
       ...options,
       headers,
     });
@@ -57,6 +91,13 @@ export class ApiClient {
     return this.request<AuthResponse>("/auth/login", {
       method: "POST",
       body: JSON.stringify(data),
+    });
+  }
+
+  googleLogin(idToken: string) {
+    return this.request<AuthResponse>("/auth/google", {
+      method: "POST",
+      body: JSON.stringify({ idToken }),
     });
   }
 
