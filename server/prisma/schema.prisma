@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  avatar       String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  preferences          UserPreferences?
+  favorites            Favorite[]
+  watchHistory         WatchHistory[]
+  refreshTokens        RefreshToken[]
+  recommendationCaches RecommendationCache[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String   @map("user_id")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model UserPreferences {
+  id              String   @id @default(cuid())
+  userId          String   @unique @map("user_id")
+  preferredGenres String[] @default([]) @map("preferred_genres")
+  genreScores     Json     @default("{}") @map("genre_scores")
+  totalWatchTime  Int      @default(0) @map("total_watch_time")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
+}
+
+/// Optional local cache of anime metadata (upserted on view/favorite).
+model Anime {
+  id           Int      @id
+  title        String
+  titleEnglish String?  @map("title_english")
+  synopsis     String?  @db.Text
+  image        String?
+  banner       String?
+  score        Float    @default(0)
+  rank         Int?
+  popularity   Int?
+  genres       String[] @default([])
+  themes       String[] @default([])
+  status       String?
+  episodes     Int      @default(0)
+  season       String?
+  year         Int?
+  type         String?
+  cachedAt     DateTime @default(now()) @map("cached_at")
+
+  favorites    Favorite[]
+  watchHistory WatchHistory[]
+
+  @@map("animes")
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  animeId   Int      @map("anime_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  anime     Anime    @relation(fields: [animeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, animeId])
+  @@index([userId, createdAt])
+  @@map("favorites")
+}
+
+model WatchHistory {
+  id            String   @id @default(cuid())
+  userId        String   @map("user_id")
+  animeId       Int      @map("anime_id")
+  episodeId     String   @map("episode_id")
+  episodeNumber Int      @map("episode_number")
+  episodeTitle  String   @map("episode_title")
+  progress      Int      @default(0)
+  duration      Int      @default(0)
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  anime         Anime    @relation(fields: [animeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, animeId, episodeId])
+  @@index([userId, updatedAt])
+  @@map("watch_history")
+}
+
+model RecommendationCache {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  animeIds  Int[]    @map("anime_ids")
+  meta      Json     @default("{}")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, expiresAt])
+  @@map("recommendation_cache")
+}

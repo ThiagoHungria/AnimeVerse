@@ -1,0 +1,207 @@
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+
+export interface ApiError {
+  message: string;
+  statusCode: number;
+}
+
+export class ApiClient {
+  private accessToken: string | null = null;
+
+  setAccessToken(token: string | null) {
+    this.accessToken = token;
+  }
+
+  getAccessToken() {
+    return this.accessToken;
+  }
+
+  async request<T>(
+    path: string,
+    options: RequestInit = {},
+  ): Promise<T> {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      ...(options.headers as Record<string, string>),
+    };
+    if (this.accessToken) {
+      headers.Authorization = `Bearer ${this.accessToken}`;
+    }
+
+    const res = await fetch(`${API_URL}${path}`, {
+      ...options,
+      headers,
+    });
+
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw {
+        message: body.message ?? res.statusText,
+        statusCode: res.status,
+      } satisfies ApiError;
+    }
+
+    return res.json() as Promise<T>;
+  }
+
+  // --- Auth ---
+  register(data: { name: string; email: string; password: string }) {
+    return this.request<AuthResponse>("/auth/register", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
+  login(data: { email: string; password: string }) {
+    return this.request<AuthResponse>("/auth/login", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
+  refresh(refreshToken: string) {
+    return this.request<TokenPair>("/auth/refresh", {
+      method: "POST",
+      body: JSON.stringify({ refreshToken }),
+    });
+  }
+
+  logout(refreshToken: string) {
+    return this.request<{ success: boolean }>("/auth/logout", {
+      method: "POST",
+      body: JSON.stringify({ refreshToken }),
+    });
+  }
+
+  // --- User ---
+  getProfile() {
+    return this.request<UserProfile>("/user/profile");
+  }
+
+  updateProfile(data: { name?: string; avatar?: string | null; preferredGenres?: string[] }) {
+    return this.request<UserProfile>("/user/profile", {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  }
+
+  // --- Favorites ---
+  addFavorite(animeId: number) {
+    return this.request("/favorites", {
+      method: "POST",
+      body: JSON.stringify({ animeId }),
+    });
+  }
+
+  removeFavorite(animeId: number) {
+    return this.request(`/favorites/${animeId}`, { method: "DELETE" });
+  }
+
+  getFavorites(page = 1) {
+    return this.request<Paginated<AnimeSummaryDto>>(`/favorites?page=${page}`);
+  }
+
+  // --- History ---
+  recordHistory(data: HistoryPayload) {
+    return this.request("/history", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
+  getHistory(page = 1) {
+    return this.request<Paginated<HistoryEntryDto>>(`/history?page=${page}`);
+  }
+
+  getContinueWatching() {
+    return this.request<HistoryEntryDto[]>("/history/continue");
+  }
+
+  // --- Recommendations ---
+  getRecommendations(userId: string) {
+    return this.request<AnimeSummaryDto[]>(`/recommendations/${userId}`);
+  }
+
+  // --- Anime (public) ---
+  getTrending() {
+    return this.request<AnimeSummaryDto[]>("/anime/trending");
+  }
+
+  health() {
+    return this.request<{ status: string }>("/health");
+  }
+}
+
+export interface TokenPair {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface AuthUser {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string | null;
+  createdAt: string;
+}
+
+export interface AuthResponse {
+  user: AuthUser;
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface UserProfile extends AuthUser {
+  preferences?: {
+    preferredGenres: string[];
+    genreScores: Record<string, number>;
+    totalWatchTime: number;
+  };
+  _count?: { favorites: number; watchHistory: number };
+}
+
+export interface AnimeSummaryDto {
+  id: string;
+  malId: number;
+  title: string;
+  titleEnglish?: string;
+  description: string;
+  image: string;
+  banner: string;
+  rating: number;
+  genres: string[];
+  themes?: string[];
+  episodeCount: number;
+  year?: number;
+  season?: string;
+  source: string;
+}
+
+export interface HistoryPayload {
+  animeId: number;
+  episodeId: string;
+  episodeNumber: number;
+  episodeTitle: string;
+  progress: number;
+  duration: number;
+}
+
+export interface HistoryEntryDto {
+  animeId: string;
+  episodeId: string;
+  animeTitle: string;
+  animeImage: string;
+  episodeNumber: number;
+  episodeTitle: string;
+  progress: number;
+  duration: number;
+  updatedAt: number;
+}
+
+export interface Paginated<T> {
+  data: T[];
+  meta: { page: number; limit: number; total: number; totalPages: number };
+}
+
+export const apiClient = new ApiClient();

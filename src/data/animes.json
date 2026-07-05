@@ -1,0 +1,1266 @@
+[
+  {
+    "id": "celestial-blades",
+    "title": "Celestial Blades",
+    "description": "Em um reino onde lâminas guardam fragmentos de estrelas caídas, a jovem espadachim Rin descobre que sua arma esconde o poder de reescrever o destino. Caçada por uma ordem secreta, ela precisa dominar a Lâmina Celeste antes que o céu desabe sobre o mundo.",
+    "image": "https://picsum.photos/seed/celestial-blades-poster/400/600",
+    "banner": "https://picsum.photos/seed/celestial-blades-banner/1280/520",
+    "rating": 9.1,
+    "genres": [
+      "Ação",
+      "Fantasia",
+      "Aventura"
+    ],
+    "year": 2024,
+    "status": "ongoing",
+    "studio": "Studio Aurora",
+    "episodes": [
+      {
+        "id": "celestial-blades-ep-1",
+        "number": 1,
+        "title": "O Começo",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/celestial-blades-ep-1/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "celestial-blades-ep-2",
+        "number": 2,
+        "title": "Ecos do Passado",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/celestial-blades-ep-2/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "celestial-blades-ep-3",
+        "number": 3,
+        "title": "A Promessa",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/celestial-blades-ep-3/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "celestial-blades-ep-4",
+        "number": 4,
+        "title": "Tempestade Iminente",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "thumbnail": "https://picsum.photos/seed/celestial-blades-ep-4/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "celestial-blades-ep-5",
+        "number": 5,
+        "title": "Sob a Lua",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        "thumbnail": "https://picsum.photos/seed/celestial-blades-ep-5/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "celestial-blades-ep-6",
+        "number": 6,
+        "title": "O Despertar",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        "thumbnail": "https://picsum.photos/seed/celestial-blades-ep-6/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "celestial-blades-ep-7",
+        "number": 7,
+        "title": "Linhas Cruzadas",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        "thumbnail": "https://picsum.photos/seed/celestial-blades-ep-7/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "celestial-blades-ep-8",
+        "number": 8,
+        "title": "Coração de Aço",
+        "videoUrl": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+        "thumbnail": "https://picsum.photos/seed/celestial-blades-ep-8/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "celestial-blades-ep-9",
+        "number": 9,
+        "title": "O Preço da Verdade",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/celestial-blades-ep-9/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "celestial-blades-ep-10",
+        "number": 10,
+        "title": "Renascer",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/celestial-blades-ep-10/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "celestial-blades-ep-11",
+        "number": 11,
+        "title": "Última Chance",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/celestial-blades-ep-11/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "celestial-blades-ep-12",
+        "number": 12,
+        "title": "O Confronto",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "thumbnail": "https://picsum.photos/seed/celestial-blades-ep-12/320/180",
+        "duration": 1440
+      }
+    ]
+  },
+  {
+    "id": "neon-syndicate",
+    "title": "Neon Syndicate",
+    "description": "Nas profundezas da megacidade de Akihabara 2099, um hacker fugitivo e uma androide com memórias proibidas se unem para derrubar o sindicato que controla a rede neural global. Cada escolha vale uma vida — ou a verdade.",
+    "image": "https://picsum.photos/seed/neon-syndicate-poster/400/600",
+    "banner": "https://picsum.photos/seed/neon-syndicate-banner/1280/520",
+    "rating": 8.8,
+    "genres": [
+      "Cyberpunk",
+      "Ação",
+      "Suspense"
+    ],
+    "year": 2023,
+    "status": "completed",
+    "studio": "Pixel Forge",
+    "episodes": [
+      {
+        "id": "neon-syndicate-ep-1",
+        "number": 1,
+        "title": "O Começo",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/neon-syndicate-ep-1/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "neon-syndicate-ep-2",
+        "number": 2,
+        "title": "Ecos do Passado",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/neon-syndicate-ep-2/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "neon-syndicate-ep-3",
+        "number": 3,
+        "title": "A Promessa",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/neon-syndicate-ep-3/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "neon-syndicate-ep-4",
+        "number": 4,
+        "title": "Tempestade Iminente",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "thumbnail": "https://picsum.photos/seed/neon-syndicate-ep-4/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "neon-syndicate-ep-5",
+        "number": 5,
+        "title": "Sob a Lua",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        "thumbnail": "https://picsum.photos/seed/neon-syndicate-ep-5/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "neon-syndicate-ep-6",
+        "number": 6,
+        "title": "O Despertar",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        "thumbnail": "https://picsum.photos/seed/neon-syndicate-ep-6/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "neon-syndicate-ep-7",
+        "number": 7,
+        "title": "Linhas Cruzadas",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        "thumbnail": "https://picsum.photos/seed/neon-syndicate-ep-7/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "neon-syndicate-ep-8",
+        "number": 8,
+        "title": "Coração de Aço",
+        "videoUrl": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+        "thumbnail": "https://picsum.photos/seed/neon-syndicate-ep-8/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "neon-syndicate-ep-9",
+        "number": 9,
+        "title": "O Preço da Verdade",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/neon-syndicate-ep-9/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "neon-syndicate-ep-10",
+        "number": 10,
+        "title": "Renascer",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/neon-syndicate-ep-10/320/180",
+        "duration": 1440
+      }
+    ]
+  },
+  {
+    "id": "spirit-garden",
+    "title": "Spirit Garden",
+    "description": "Após herdar uma estranha estufa de sua avó, Haru passa a enxergar os espíritos das plantas. Entre chás quentes e tardes preguiçosas, ele aprende que cuidar de algo pequeno pode curar feridas que ninguém mais vê.",
+    "image": "https://picsum.photos/seed/spirit-garden-poster/400/600",
+    "banner": "https://picsum.photos/seed/spirit-garden-banner/1280/520",
+    "rating": 8.5,
+    "genres": [
+      "Slice of Life",
+      "Sobrenatural",
+      "Drama"
+    ],
+    "year": 2022,
+    "status": "completed",
+    "studio": "Studio Komorebi",
+    "episodes": [
+      {
+        "id": "spirit-garden-ep-1",
+        "number": 1,
+        "title": "O Começo",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/spirit-garden-ep-1/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "spirit-garden-ep-2",
+        "number": 2,
+        "title": "Ecos do Passado",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/spirit-garden-ep-2/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "spirit-garden-ep-3",
+        "number": 3,
+        "title": "A Promessa",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/spirit-garden-ep-3/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "spirit-garden-ep-4",
+        "number": 4,
+        "title": "Tempestade Iminente",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "thumbnail": "https://picsum.photos/seed/spirit-garden-ep-4/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "spirit-garden-ep-5",
+        "number": 5,
+        "title": "Sob a Lua",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        "thumbnail": "https://picsum.photos/seed/spirit-garden-ep-5/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "spirit-garden-ep-6",
+        "number": 6,
+        "title": "O Despertar",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        "thumbnail": "https://picsum.photos/seed/spirit-garden-ep-6/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "spirit-garden-ep-7",
+        "number": 7,
+        "title": "Linhas Cruzadas",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        "thumbnail": "https://picsum.photos/seed/spirit-garden-ep-7/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "spirit-garden-ep-8",
+        "number": 8,
+        "title": "Coração de Aço",
+        "videoUrl": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+        "thumbnail": "https://picsum.photos/seed/spirit-garden-ep-8/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "spirit-garden-ep-9",
+        "number": 9,
+        "title": "O Preço da Verdade",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/spirit-garden-ep-9/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "spirit-garden-ep-10",
+        "number": 10,
+        "title": "Renascer",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/spirit-garden-ep-10/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "spirit-garden-ep-11",
+        "number": 11,
+        "title": "Última Chance",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/spirit-garden-ep-11/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "spirit-garden-ep-12",
+        "number": 12,
+        "title": "O Confronto",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "thumbnail": "https://picsum.photos/seed/spirit-garden-ep-12/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "spirit-garden-ep-13",
+        "number": 13,
+        "title": "Além do Horizonte",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        "thumbnail": "https://picsum.photos/seed/spirit-garden-ep-13/320/180",
+        "duration": 1440
+      }
+    ]
+  },
+  {
+    "id": "iron-vanguard",
+    "title": "Iron Vanguard",
+    "description": "A última linha de defesa da humanidade são os Vanguardas: mechas pilotados por adolescentes sincronizados com IAs de combate. Quando o piloto número zero retorna do exílio, velhos segredos da guerra ameaçam quebrar a frágil aliança.",
+    "image": "https://picsum.photos/seed/iron-vanguard-poster/400/600",
+    "banner": "https://picsum.photos/seed/iron-vanguard-banner/1280/520",
+    "rating": 8.9,
+    "genres": [
+      "Mecha",
+      "Ação",
+      "Guerra"
+    ],
+    "year": 2024,
+    "status": "ongoing",
+    "studio": "Mecha Dynamics",
+    "episodes": [
+      {
+        "id": "iron-vanguard-ep-1",
+        "number": 1,
+        "title": "O Começo",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/iron-vanguard-ep-1/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "iron-vanguard-ep-2",
+        "number": 2,
+        "title": "Ecos do Passado",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/iron-vanguard-ep-2/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "iron-vanguard-ep-3",
+        "number": 3,
+        "title": "A Promessa",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/iron-vanguard-ep-3/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "iron-vanguard-ep-4",
+        "number": 4,
+        "title": "Tempestade Iminente",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "thumbnail": "https://picsum.photos/seed/iron-vanguard-ep-4/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "iron-vanguard-ep-5",
+        "number": 5,
+        "title": "Sob a Lua",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        "thumbnail": "https://picsum.photos/seed/iron-vanguard-ep-5/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "iron-vanguard-ep-6",
+        "number": 6,
+        "title": "O Despertar",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        "thumbnail": "https://picsum.photos/seed/iron-vanguard-ep-6/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "iron-vanguard-ep-7",
+        "number": 7,
+        "title": "Linhas Cruzadas",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        "thumbnail": "https://picsum.photos/seed/iron-vanguard-ep-7/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "iron-vanguard-ep-8",
+        "number": 8,
+        "title": "Coração de Aço",
+        "videoUrl": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+        "thumbnail": "https://picsum.photos/seed/iron-vanguard-ep-8/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "iron-vanguard-ep-9",
+        "number": 9,
+        "title": "O Preço da Verdade",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/iron-vanguard-ep-9/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "iron-vanguard-ep-10",
+        "number": 10,
+        "title": "Renascer",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/iron-vanguard-ep-10/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "iron-vanguard-ep-11",
+        "number": 11,
+        "title": "Última Chance",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/iron-vanguard-ep-11/320/180",
+        "duration": 1440
+      }
+    ]
+  },
+  {
+    "id": "tidecaller",
+    "title": "Tidecaller",
+    "description": "Uma garota capaz de ouvir a voz do oceano embarca em uma jornada para encontrar a ilha que aparece apenas uma vez por geração. No caminho, ela enfrenta tempestades, piratas e o próprio coração indeciso.",
+    "image": "https://picsum.photos/seed/tidecaller-poster/400/600",
+    "banner": "https://picsum.photos/seed/tidecaller-banner/1280/520",
+    "rating": 8.3,
+    "genres": [
+      "Aventura",
+      "Fantasia",
+      "Romance"
+    ],
+    "year": 2021,
+    "status": "completed",
+    "studio": "BlueWave Animation",
+    "episodes": [
+      {
+        "id": "tidecaller-ep-1",
+        "number": 1,
+        "title": "O Começo",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/tidecaller-ep-1/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "tidecaller-ep-2",
+        "number": 2,
+        "title": "Ecos do Passado",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/tidecaller-ep-2/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "tidecaller-ep-3",
+        "number": 3,
+        "title": "A Promessa",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/tidecaller-ep-3/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "tidecaller-ep-4",
+        "number": 4,
+        "title": "Tempestade Iminente",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "thumbnail": "https://picsum.photos/seed/tidecaller-ep-4/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "tidecaller-ep-5",
+        "number": 5,
+        "title": "Sob a Lua",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        "thumbnail": "https://picsum.photos/seed/tidecaller-ep-5/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "tidecaller-ep-6",
+        "number": 6,
+        "title": "O Despertar",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        "thumbnail": "https://picsum.photos/seed/tidecaller-ep-6/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "tidecaller-ep-7",
+        "number": 7,
+        "title": "Linhas Cruzadas",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        "thumbnail": "https://picsum.photos/seed/tidecaller-ep-7/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "tidecaller-ep-8",
+        "number": 8,
+        "title": "Coração de Aço",
+        "videoUrl": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+        "thumbnail": "https://picsum.photos/seed/tidecaller-ep-8/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "tidecaller-ep-9",
+        "number": 9,
+        "title": "O Preço da Verdade",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/tidecaller-ep-9/320/180",
+        "duration": 1440
+      }
+    ]
+  },
+  {
+    "id": "midnight-ramen",
+    "title": "Midnight Ramen",
+    "description": "Uma barraca de ramen que só abre à meia-noite recebe clientes com histórias improváveis. Entre tigelas fumegantes, o misterioso chef serve mais do que comida: ele serve segundas chances.",
+    "image": "https://picsum.photos/seed/midnight-ramen-poster/400/600",
+    "banner": "https://picsum.photos/seed/midnight-ramen-banner/1280/520",
+    "rating": 8,
+    "genres": [
+      "Comédia",
+      "Slice of Life",
+      "Gastronomia"
+    ],
+    "year": 2023,
+    "status": "ongoing",
+    "studio": "Studio Komorebi",
+    "episodes": [
+      {
+        "id": "midnight-ramen-ep-1",
+        "number": 1,
+        "title": "O Começo",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/midnight-ramen-ep-1/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "midnight-ramen-ep-2",
+        "number": 2,
+        "title": "Ecos do Passado",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/midnight-ramen-ep-2/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "midnight-ramen-ep-3",
+        "number": 3,
+        "title": "A Promessa",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/midnight-ramen-ep-3/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "midnight-ramen-ep-4",
+        "number": 4,
+        "title": "Tempestade Iminente",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "thumbnail": "https://picsum.photos/seed/midnight-ramen-ep-4/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "midnight-ramen-ep-5",
+        "number": 5,
+        "title": "Sob a Lua",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        "thumbnail": "https://picsum.photos/seed/midnight-ramen-ep-5/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "midnight-ramen-ep-6",
+        "number": 6,
+        "title": "O Despertar",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        "thumbnail": "https://picsum.photos/seed/midnight-ramen-ep-6/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "midnight-ramen-ep-7",
+        "number": 7,
+        "title": "Linhas Cruzadas",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        "thumbnail": "https://picsum.photos/seed/midnight-ramen-ep-7/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "midnight-ramen-ep-8",
+        "number": 8,
+        "title": "Coração de Aço",
+        "videoUrl": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+        "thumbnail": "https://picsum.photos/seed/midnight-ramen-ep-8/320/180",
+        "duration": 1440
+      }
+    ]
+  },
+  {
+    "id": "shadow-academy",
+    "title": "Shadow Academy",
+    "description": "Em uma academia escondida entre dimensões, estudantes treinam para conter criaturas que escapam dos sonhos humanos. Quando um novato manifesta uma sombra que ninguém consegue classificar, a escola inteira entra em alerta.",
+    "image": "https://picsum.photos/seed/shadow-academy-poster/400/600",
+    "banner": "https://picsum.photos/seed/shadow-academy-banner/1280/520",
+    "rating": 8.7,
+    "genres": [
+      "Sobrenatural",
+      "Ação",
+      "Mistério"
+    ],
+    "year": 2024,
+    "status": "ongoing",
+    "studio": "Eclipse Works",
+    "episodes": [
+      {
+        "id": "shadow-academy-ep-1",
+        "number": 1,
+        "title": "O Começo",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/shadow-academy-ep-1/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "shadow-academy-ep-2",
+        "number": 2,
+        "title": "Ecos do Passado",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/shadow-academy-ep-2/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "shadow-academy-ep-3",
+        "number": 3,
+        "title": "A Promessa",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/shadow-academy-ep-3/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "shadow-academy-ep-4",
+        "number": 4,
+        "title": "Tempestade Iminente",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "thumbnail": "https://picsum.photos/seed/shadow-academy-ep-4/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "shadow-academy-ep-5",
+        "number": 5,
+        "title": "Sob a Lua",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        "thumbnail": "https://picsum.photos/seed/shadow-academy-ep-5/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "shadow-academy-ep-6",
+        "number": 6,
+        "title": "O Despertar",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        "thumbnail": "https://picsum.photos/seed/shadow-academy-ep-6/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "shadow-academy-ep-7",
+        "number": 7,
+        "title": "Linhas Cruzadas",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        "thumbnail": "https://picsum.photos/seed/shadow-academy-ep-7/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "shadow-academy-ep-8",
+        "number": 8,
+        "title": "Coração de Aço",
+        "videoUrl": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+        "thumbnail": "https://picsum.photos/seed/shadow-academy-ep-8/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "shadow-academy-ep-9",
+        "number": 9,
+        "title": "O Preço da Verdade",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/shadow-academy-ep-9/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "shadow-academy-ep-10",
+        "number": 10,
+        "title": "Renascer",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/shadow-academy-ep-10/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "shadow-academy-ep-11",
+        "number": 11,
+        "title": "Última Chance",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/shadow-academy-ep-11/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "shadow-academy-ep-12",
+        "number": 12,
+        "title": "O Confronto",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "thumbnail": "https://picsum.photos/seed/shadow-academy-ep-12/320/180",
+        "duration": 1440
+      }
+    ]
+  },
+  {
+    "id": "stellar-melody",
+    "title": "Stellar Melody",
+    "description": "Uma banda escolar à beira do fim ganha uma última chance quando uma transferida com ouvido absoluto entra em cena. Juntos, eles transformam o medo do palco na melodia que pode mudar suas vidas.",
+    "image": "https://picsum.photos/seed/stellar-melody-poster/400/600",
+    "banner": "https://picsum.photos/seed/stellar-melody-banner/1280/520",
+    "rating": 8.4,
+    "genres": [
+      "Música",
+      "Drama",
+      "Romance"
+    ],
+    "year": 2022,
+    "status": "completed",
+    "studio": "Aurora Sound",
+    "episodes": [
+      {
+        "id": "stellar-melody-ep-1",
+        "number": 1,
+        "title": "O Começo",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/stellar-melody-ep-1/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "stellar-melody-ep-2",
+        "number": 2,
+        "title": "Ecos do Passado",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/stellar-melody-ep-2/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "stellar-melody-ep-3",
+        "number": 3,
+        "title": "A Promessa",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/stellar-melody-ep-3/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "stellar-melody-ep-4",
+        "number": 4,
+        "title": "Tempestade Iminente",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "thumbnail": "https://picsum.photos/seed/stellar-melody-ep-4/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "stellar-melody-ep-5",
+        "number": 5,
+        "title": "Sob a Lua",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        "thumbnail": "https://picsum.photos/seed/stellar-melody-ep-5/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "stellar-melody-ep-6",
+        "number": 6,
+        "title": "O Despertar",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        "thumbnail": "https://picsum.photos/seed/stellar-melody-ep-6/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "stellar-melody-ep-7",
+        "number": 7,
+        "title": "Linhas Cruzadas",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        "thumbnail": "https://picsum.photos/seed/stellar-melody-ep-7/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "stellar-melody-ep-8",
+        "number": 8,
+        "title": "Coração de Aço",
+        "videoUrl": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+        "thumbnail": "https://picsum.photos/seed/stellar-melody-ep-8/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "stellar-melody-ep-9",
+        "number": 9,
+        "title": "O Preço da Verdade",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/stellar-melody-ep-9/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "stellar-melody-ep-10",
+        "number": 10,
+        "title": "Renascer",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/stellar-melody-ep-10/320/180",
+        "duration": 1440
+      }
+    ]
+  },
+  {
+    "id": "frostfang-saga",
+    "title": "Frostfang Saga",
+    "description": "No norte congelado, clãs de caçadores enfrentam lobos colossais que carregam o inverno em suas presas. Uma jovem caçadora jura proteger sua vila — mesmo que isso signifique domar a fera que matou seu pai.",
+    "image": "https://picsum.photos/seed/frostfang-saga-poster/400/600",
+    "banner": "https://picsum.photos/seed/frostfang-saga-banner/1280/520",
+    "rating": 9,
+    "genres": [
+      "Fantasia",
+      "Ação",
+      "Aventura"
+    ],
+    "year": 2023,
+    "status": "ongoing",
+    "studio": "Studio Aurora",
+    "episodes": [
+      {
+        "id": "frostfang-saga-ep-1",
+        "number": 1,
+        "title": "O Começo",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/frostfang-saga-ep-1/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "frostfang-saga-ep-2",
+        "number": 2,
+        "title": "Ecos do Passado",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/frostfang-saga-ep-2/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "frostfang-saga-ep-3",
+        "number": 3,
+        "title": "A Promessa",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/frostfang-saga-ep-3/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "frostfang-saga-ep-4",
+        "number": 4,
+        "title": "Tempestade Iminente",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "thumbnail": "https://picsum.photos/seed/frostfang-saga-ep-4/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "frostfang-saga-ep-5",
+        "number": 5,
+        "title": "Sob a Lua",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        "thumbnail": "https://picsum.photos/seed/frostfang-saga-ep-5/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "frostfang-saga-ep-6",
+        "number": 6,
+        "title": "O Despertar",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        "thumbnail": "https://picsum.photos/seed/frostfang-saga-ep-6/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "frostfang-saga-ep-7",
+        "number": 7,
+        "title": "Linhas Cruzadas",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        "thumbnail": "https://picsum.photos/seed/frostfang-saga-ep-7/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "frostfang-saga-ep-8",
+        "number": 8,
+        "title": "Coração de Aço",
+        "videoUrl": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+        "thumbnail": "https://picsum.photos/seed/frostfang-saga-ep-8/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "frostfang-saga-ep-9",
+        "number": 9,
+        "title": "O Preço da Verdade",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/frostfang-saga-ep-9/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "frostfang-saga-ep-10",
+        "number": 10,
+        "title": "Renascer",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/frostfang-saga-ep-10/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "frostfang-saga-ep-11",
+        "number": 11,
+        "title": "Última Chance",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/frostfang-saga-ep-11/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "frostfang-saga-ep-12",
+        "number": 12,
+        "title": "O Confronto",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "thumbnail": "https://picsum.photos/seed/frostfang-saga-ep-12/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "frostfang-saga-ep-13",
+        "number": 13,
+        "title": "Além do Horizonte",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        "thumbnail": "https://picsum.photos/seed/frostfang-saga-ep-13/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "frostfang-saga-ep-14",
+        "number": 14,
+        "title": "Recomeço",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        "thumbnail": "https://picsum.photos/seed/frostfang-saga-ep-14/320/180",
+        "duration": 1440
+      }
+    ]
+  },
+  {
+    "id": "quantum-detective",
+    "title": "Quantum Detective",
+    "description": "Um detetive capaz de revisitar os últimos cinco minutos de qualquer cena resolve crimes impossíveis. Mas quando ele começa a aparecer nas próprias investigações, a linha entre culpado e investigador se dissolve.",
+    "image": "https://picsum.photos/seed/quantum-detective-poster/400/600",
+    "banner": "https://picsum.photos/seed/quantum-detective-banner/1280/520",
+    "rating": 8.6,
+    "genres": [
+      "Mistério",
+      "Suspense",
+      "Ficção Científica"
+    ],
+    "year": 2024,
+    "status": "ongoing",
+    "studio": "Pixel Forge",
+    "episodes": [
+      {
+        "id": "quantum-detective-ep-1",
+        "number": 1,
+        "title": "O Começo",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/quantum-detective-ep-1/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "quantum-detective-ep-2",
+        "number": 2,
+        "title": "Ecos do Passado",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/quantum-detective-ep-2/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "quantum-detective-ep-3",
+        "number": 3,
+        "title": "A Promessa",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/quantum-detective-ep-3/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "quantum-detective-ep-4",
+        "number": 4,
+        "title": "Tempestade Iminente",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "thumbnail": "https://picsum.photos/seed/quantum-detective-ep-4/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "quantum-detective-ep-5",
+        "number": 5,
+        "title": "Sob a Lua",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        "thumbnail": "https://picsum.photos/seed/quantum-detective-ep-5/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "quantum-detective-ep-6",
+        "number": 6,
+        "title": "O Despertar",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        "thumbnail": "https://picsum.photos/seed/quantum-detective-ep-6/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "quantum-detective-ep-7",
+        "number": 7,
+        "title": "Linhas Cruzadas",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        "thumbnail": "https://picsum.photos/seed/quantum-detective-ep-7/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "quantum-detective-ep-8",
+        "number": 8,
+        "title": "Coração de Aço",
+        "videoUrl": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+        "thumbnail": "https://picsum.photos/seed/quantum-detective-ep-8/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "quantum-detective-ep-9",
+        "number": 9,
+        "title": "O Preço da Verdade",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/quantum-detective-ep-9/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "quantum-detective-ep-10",
+        "number": 10,
+        "title": "Renascer",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/quantum-detective-ep-10/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "quantum-detective-ep-11",
+        "number": 11,
+        "title": "Última Chance",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/quantum-detective-ep-11/320/180",
+        "duration": 1440
+      }
+    ]
+  },
+  {
+    "id": "petal-storm",
+    "title": "Petal Storm",
+    "description": "Sob as cerejeiras de uma cidade litorânea, dois jovens prometem se reencontrar quando as pétalas voltarem a cair. Anos depois, o destino testa se promessas de infância resistem ao tempo.",
+    "image": "https://picsum.photos/seed/petal-storm-poster/400/600",
+    "banner": "https://picsum.photos/seed/petal-storm-banner/1280/520",
+    "rating": 8.2,
+    "genres": [
+      "Romance",
+      "Drama",
+      "Slice of Life"
+    ],
+    "year": 2021,
+    "status": "completed",
+    "studio": "Studio Komorebi",
+    "episodes": [
+      {
+        "id": "petal-storm-ep-1",
+        "number": 1,
+        "title": "O Começo",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/petal-storm-ep-1/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "petal-storm-ep-2",
+        "number": 2,
+        "title": "Ecos do Passado",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/petal-storm-ep-2/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "petal-storm-ep-3",
+        "number": 3,
+        "title": "A Promessa",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/petal-storm-ep-3/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "petal-storm-ep-4",
+        "number": 4,
+        "title": "Tempestade Iminente",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "thumbnail": "https://picsum.photos/seed/petal-storm-ep-4/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "petal-storm-ep-5",
+        "number": 5,
+        "title": "Sob a Lua",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        "thumbnail": "https://picsum.photos/seed/petal-storm-ep-5/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "petal-storm-ep-6",
+        "number": 6,
+        "title": "O Despertar",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        "thumbnail": "https://picsum.photos/seed/petal-storm-ep-6/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "petal-storm-ep-7",
+        "number": 7,
+        "title": "Linhas Cruzadas",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        "thumbnail": "https://picsum.photos/seed/petal-storm-ep-7/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "petal-storm-ep-8",
+        "number": 8,
+        "title": "Coração de Aço",
+        "videoUrl": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+        "thumbnail": "https://picsum.photos/seed/petal-storm-ep-8/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "petal-storm-ep-9",
+        "number": 9,
+        "title": "O Preço da Verdade",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/petal-storm-ep-9/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "petal-storm-ep-10",
+        "number": 10,
+        "title": "Renascer",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/petal-storm-ep-10/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "petal-storm-ep-11",
+        "number": 11,
+        "title": "Última Chance",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/petal-storm-ep-11/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "petal-storm-ep-12",
+        "number": 12,
+        "title": "O Confronto",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "thumbnail": "https://picsum.photos/seed/petal-storm-ep-12/320/180",
+        "duration": 1440
+      }
+    ]
+  },
+  {
+    "id": "abyss-protocol",
+    "title": "Abyss Protocol",
+    "description": "Uma estação de pesquisa no fundo do oceano perde contato com a superfície. A equipe de resgate descobre que algo lá embaixo aprendeu a imitar vozes humanas — e está com fome de companhia.",
+    "image": "https://picsum.photos/seed/abyss-protocol-poster/400/600",
+    "banner": "https://picsum.photos/seed/abyss-protocol-banner/1280/520",
+    "rating": 8.5,
+    "genres": [
+      "Terror",
+      "Suspense",
+      "Ficção Científica"
+    ],
+    "year": 2024,
+    "status": "ongoing",
+    "studio": "Eclipse Works",
+    "episodes": [
+      {
+        "id": "abyss-protocol-ep-1",
+        "number": 1,
+        "title": "O Começo",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/abyss-protocol-ep-1/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "abyss-protocol-ep-2",
+        "number": 2,
+        "title": "Ecos do Passado",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnail": "https://picsum.photos/seed/abyss-protocol-ep-2/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "abyss-protocol-ep-3",
+        "number": 3,
+        "title": "A Promessa",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnail": "https://picsum.photos/seed/abyss-protocol-ep-3/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "abyss-protocol-ep-4",
+        "number": 4,
+        "title": "Tempestade Iminente",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "thumbnail": "https://picsum.photos/seed/abyss-protocol-ep-4/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "abyss-protocol-ep-5",
+        "number": 5,
+        "title": "Sob a Lua",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        "thumbnail": "https://picsum.photos/seed/abyss-protocol-ep-5/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "abyss-protocol-ep-6",
+        "number": 6,
+        "title": "O Despertar",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        "thumbnail": "https://picsum.photos/seed/abyss-protocol-ep-6/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "abyss-protocol-ep-7",
+        "number": 7,
+        "title": "Linhas Cruzadas",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        "thumbnail": "https://picsum.photos/seed/abyss-protocol-ep-7/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "abyss-protocol-ep-8",
+        "number": 8,
+        "title": "Coração de Aço",
+        "videoUrl": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+        "thumbnail": "https://picsum.photos/seed/abyss-protocol-ep-8/320/180",
+        "duration": 1440
+      },
+      {
+        "id": "abyss-protocol-ep-9",
+        "number": 9,
+        "title": "O Preço da Verdade",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnail": "https://picsum.photos/seed/abyss-protocol-ep-9/320/180",
+        "duration": 1440
+      }
+    ]
+  }
+]
