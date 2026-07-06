@@ -7,6 +7,7 @@ import { UserModule } from "./modules/user/user.module";
 import { AnimeModule } from "./modules/anime/anime.module";
 import { FavoritesModule } from "./modules/favorites/favorites.module";
 import { HistoryModule } from "./modules/history/history.module";
+import { LibraryModule } from "./modules/library/library.module";
 import { RecommendationModule } from "./modules/recommendation/recommendation.module";
 import { AppController } from "./app.controller";
 
@@ -20,6 +21,7 @@ import { AppController } from "./app.controller";
     AnimeModule,
     FavoritesModule,
     HistoryModule,
+    LibraryModule,
     RecommendationModule,
   ],
   controllers: [AppController],

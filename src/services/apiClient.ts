@@ -159,6 +159,24 @@ export class ApiClient {
     return this.request<HistoryEntryDto[]>("/history/continue");
   }
 
+  // --- Library ---
+  upsertLibrary(animeId: number, list: "watching" | "completed" | "planned") {
+    return this.request("/library", {
+      method: "POST",
+      body: JSON.stringify({ animeId, list }),
+    });
+  }
+
+  removeLibrary(animeId: number) {
+    return this.request(`/library/${animeId}`, { method: "DELETE" });
+  }
+
+  getLibrary(page = 1, list?: string) {
+    const params = new URLSearchParams({ page: String(page) });
+    if (list) params.set("list", list);
+    return this.request<Paginated<LibraryEntryDto>>(`/library?${params}`);
+  }
+
   // --- Recommendations ---
   getRecommendations(userId: string) {
     return this.request<AnimeSummaryDto[]>(`/recommendations/${userId}`);
@@ -243,6 +261,12 @@ export interface HistoryEntryDto {
 export interface Paginated<T> {
   data: T[];
   meta: { page: number; limit: number; total: number; totalPages: number };
+}
+
+export interface LibraryEntryDto {
+  list: "watching" | "completed" | "planned";
+  anime: AnimeSummaryDto;
+  updatedAt: number;
 }
 
 export const apiClient = new ApiClient();

@@ -24,6 +24,8 @@ export const queryKeys = {
   discoveryPool: ["discoveryPool"] as const,
   anime: (id: string) => ["anime", id] as const,
   similar: (id: string) => ["similar", id] as const,
+  characters: (id: string) => ["characters", id] as const,
+  staff: (id: string) => ["staff", id] as const,
   search: (params: SearchParams) => ["search", params] as const,
 };
 
@@ -98,4 +100,22 @@ export const useSearch = (params: SearchParams, enabled = true) =>
     queryFn: () => animeService.search(params),
     enabled,
     staleTime: 1000 * 60 * 5,
+  });
+
+export const useAnimeCharacters = (id: string) =>
+  useQuery({
+    queryKey: queryKeys.characters(id),
+    queryFn: () => animeService.getCharacters(id),
+    enabled: Boolean(id),
+    ...CATALOG,
+    staleTime: 1000 * 60 * 60 * 24,
+  });
+
+export const useAnimeStaff = (id: string) =>
+  useQuery({
+    queryKey: queryKeys.staff(id),
+    queryFn: () => animeService.getStaff(id),
+    enabled: Boolean(id),
+    ...CATALOG,
+    staleTime: 1000 * 60 * 60 * 24,
   });

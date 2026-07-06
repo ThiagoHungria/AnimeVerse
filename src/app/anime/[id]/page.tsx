@@ -2,20 +2,15 @@
 
 import { useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
-import { motion } from "framer-motion";
 import { AlertCircle } from "lucide-react";
 import { useAnime } from "@/features/anime/hooks/useAnimeQueries";
 import { useHistoryStore } from "@/store/history.store";
 import { useProfileStore } from "@/store/profile.store";
 import { useHydrated } from "@/hooks/useHydrated";
 import { AnimeDetailCinematic } from "@/features/anime/components/AnimeDetailCinematic";
-import { EpisodeList } from "@/features/anime/components/EpisodeList";
-import { TrailerEmbed } from "@/features/anime/components/TrailerEmbed";
-import { SimilarSection } from "@/features/anime/components/SimilarSection";
+import { AnimeDetailTabs } from "@/features/anime/components/AnimeDetailTabs";
 import { HeroCinematicSkeleton } from "@/components/ui/CinematicSkeleton";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { GlassPanel } from "@/components/ui/GlassPanel";
-import { fade } from "@/utils/animation";
 
 export default function AnimeDetailsPage() {
   const params = useParams<{ id: string }>();
@@ -66,39 +61,7 @@ export default function AnimeDetailsPage() {
       />
 
       <div className="mx-auto max-w-[1400px] px-4 md:px-8">
-        {anime.trailerUrl && (
-          <motion.section
-            className="mt-8"
-            variants={fade}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <GlassPanel className="p-4 md:p-6">
-              <h2 className="mb-3 text-lg font-bold">Trailer</h2>
-              <TrailerEmbed
-                embedUrl={anime.trailerUrl}
-                poster={anime.banner}
-                title={anime.title}
-              />
-            </GlassPanel>
-          </motion.section>
-        )}
-
-        {anime.episodes.length > 0 && (
-          <motion.section
-            className="mt-10"
-            variants={fade}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <h2 className="mb-4 text-xl font-black">Episódios</h2>
-            <EpisodeList animeId={anime.id} episodes={anime.episodes} />
-          </motion.section>
-        )}
-
-        <SimilarSection animeId={anime.id} title="Similar a este anime" />
+        <AnimeDetailTabs anime={anime} />
       </div>
     </div>
   );

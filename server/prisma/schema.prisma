@@ -21,6 +21,7 @@ model User {
   preferences          UserPreferences?
   favorites            Favorite[]
   watchHistory         WatchHistory[]
+  libraryEntries       LibraryEntry[]
   refreshTokens        RefreshToken[]
   recommendationCaches RecommendationCache[]
 
@@ -73,8 +74,24 @@ model Anime {
 
   favorites    Favorite[]
   watchHistory WatchHistory[]
+  libraryEntries LibraryEntry[]
 
   @@map("animes")
+}
+
+model LibraryEntry {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  animeId   Int      @map("anime_id")
+  list      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  anime     Anime    @relation(fields: [animeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, animeId])
+  @@index([userId, list])
+  @@map("library_entries")
 }
 
 model Favorite {

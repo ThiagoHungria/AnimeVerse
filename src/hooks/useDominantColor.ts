@@ -3,9 +3,9 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   paletteFromAnimeId,
-  paletteFromImage,
   type AnimePalette,
 } from "@/utils/colorSystem";
+import { buildPaletteFromImage } from "@/utils/colorExtractor";
 
 /** Extract or derive a cinematic palette from anime artwork. */
 export function useDominantColor(
@@ -19,7 +19,7 @@ export function useDominantColor(
     if (!imageUrl) return;
 
     let cancelled = false;
-    paletteFromImage(imageUrl, animeId).then((next) => {
+    buildPaletteFromImage(imageUrl, animeId).then((next) => {
       if (!cancelled) setPalette(next);
     });
 

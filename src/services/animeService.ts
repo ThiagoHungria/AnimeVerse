@@ -233,4 +233,22 @@ export const animeService = {
       return fallbackData.popular();
     }
   },
+
+  async getCharacters(id: string) {
+    if (!isMalId(id)) return [];
+    try {
+      return await jikanApi.getCharacters(Number(id));
+    } catch {
+      return [];
+    }
+  },
+
+  async getStaff(id: string) {
+    if (!isMalId(id)) return [];
+    try {
+      return await jikanApi.getStaff(Number(id));
+    } catch {
+      return [];
+    }
+  },
 };

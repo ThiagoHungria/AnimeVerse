@@ -241,4 +241,74 @@ export const jikanApi = {
     );
     return res.data;
   },
+
+  async getCharacters(id: number): Promise<
+    { id: string; name: string; image: string; role: string; voiceActor?: string }[]
+  > {
+    interface JikanCharEntry {
+      character: {
+        mal_id: number;
+        name: string;
+        images?: { jpg?: { image_url?: string } };
+      };
+      role: string;
+    }
+    const res = await jget<JikanList<JikanCharEntry>>(
+      `/anime/${id}/characters`,
+    );
+    const base: {
+      id: string;
+      name: string;
+      image: string;
+      role: string;
+      voiceActor?: string;
+    }[] = res.data.map((entry) => ({
+      id: String(entry.character.mal_id),
+      name: entry.character.name,
+      image: entry.character.images?.jpg?.image_url ?? "",
+      role: entry.role,
+    }));
+
+    const mains = base.filter((c) => c.role === "Main").slice(0, 6);
+    await Promise.all(
+      mains.map(async (ch) => {
+        try {
+          interface JikanCharFull {
+            data: {
+              voices?: { person: { name: string }; language: string }[];
+            };
+          }
+          const full = await jget<JikanCharFull>(`/characters/${ch.id}/full`);
+          const jp =
+            full.data.voices?.find((v) => v.language === "Japanese") ??
+            full.data.voices?.[0];
+          if (jp) ch.voiceActor = jp.person.name;
+        } catch {
+          /* voice optional */
+        }
+      }),
+    );
+
+    return base;
+  },
+
+  async getStaff(id: number): Promise<
+    { id: string; name: string; image: string; positions: string[] }[]
+  > {
+    interface JikanStaffEntry {
+      person: {
+        mal_id: number;
+        name: string;
+        images?: { jpg?: { image_url?: string } };
+      };
+      positions: string[];
+    }
+    const res = await jget<JikanList<JikanStaffEntry>>(`/anime/${id}/staff`);
+    return res.data.map((entry) => ({
+      id: String(entry.person.mal_id),
+      name: entry.person.name,
+      image: entry.person.images?.jpg?.image_url ?? "",
+      positions: entry.positions,
+    }));
+  },
 };

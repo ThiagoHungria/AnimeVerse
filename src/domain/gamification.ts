@@ -79,6 +79,20 @@ export function levelFromXp(xp: number): number {
   return Math.floor(xp / 200) + 1;
 }
 
+const LEVEL_TITLES: { min: number; title: string }[] = [
+  { min: 20, title: "Otaku Lendário" },
+  { min: 15, title: "Otaku Elite" },
+  { min: 12, title: "Otaku Veterano" },
+  { min: 8, title: "Maratonista" },
+  { min: 5, title: "Explorador" },
+  { min: 3, title: "Iniciante" },
+  { min: 1, title: "Novato" },
+];
+
+export function levelTitle(level: number): string {
+  return LEVEL_TITLES.find((t) => level >= t.min)?.title ?? "Novato";
+}
+
 export function xpProgressInLevel(xp: number): {
   current: number;
   needed: number;

@@ -2,10 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Play, History } from "lucide-react";
+import { Play } from "lucide-react";
+import { motion } from "framer-motion";
 import { useHistoryStore } from "@/store/history.store";
 import { useHydrated } from "@/hooks/useHydrated";
 import { progressPercent } from "@/utils/format";
+import { HorizontalCarousel, CarouselItem } from "@/components/HorizontalCarousel";
+import { EpisodeProgress } from "@/components/EpisodeProgress";
+import { useDominantColor } from "@/hooks/useDominantColor";
 
 /** "Continue assistindo" carousel sourced from the LocalStorage history. */
 export function ContinueWatchingRow() {
@@ -21,54 +25,67 @@ export function ContinueWatchingRow() {
   if (!hydrated || inProgress.length === 0) return null;
 
   return (
-    <section className="animate-fade-up">
-      <div className="mb-3 flex items-center gap-2 px-4 md:px-8">
-        <History className="text-primary size-4" />
-        <h2 className="text-lg font-bold md:text-xl">Continuar assistindo</h2>
-      </div>
+    <HorizontalCarousel title="Continuar assistindo" eyebrow="De onde parou">
+      {inProgress.map((entry) => (
+        <CarouselItem key={`${entry.animeId}-${entry.episodeId}`} className="w-64 shrink-0 snap-start sm:w-72">
+          <ContinueCard entry={entry} />
+        </CarouselItem>
+      ))}
+    </HorizontalCarousel>
+  );
+}
 
-      <div className="scrollbar-hide flex gap-4 overflow-x-auto px-4 pb-2 md:px-8">
-        {inProgress.map((entry) => {
-          const percent = progressPercent(entry.progress, entry.duration);
-          return (
-            <Link
-              key={`${entry.animeId}-${entry.episodeId}`}
-              href={`/watch/${entry.animeId}/${entry.episodeId}`}
-              className="group relative w-60 shrink-0 overflow-hidden rounded-xl border border-border bg-card transition-all hover:-translate-y-1 hover:border-border-strong sm:w-72"
+function ContinueCard({
+  entry,
+}: {
+  entry: {
+    animeId: string;
+    episodeId: string;
+    animeTitle: string;
+    animeImage: string;
+    episodeNumber: number;
+    progress: number;
+    duration: number;
+  };
+}) {
+  const palette = useDominantColor(entry.animeImage, entry.animeId);
+  const percent = progressPercent(entry.progress, entry.duration);
+
+  return (
+    <motion.div whileHover={{ y: -4 }} transition={{ type: "spring", stiffness: 400, damping: 30 }}>
+      <Link
+        href={`/watch/${entry.animeId}/${entry.episodeId}`}
+        className="group relative block overflow-hidden rounded-xl border border-border bg-card transition-all hover:border-white/15"
+        style={{ boxShadow: `0 8px 24px -8px ${palette.primary}30` }}
+      >
+        <div className="relative aspect-video w-full overflow-hidden">
+          <Image
+            src={entry.animeImage}
+            alt={entry.animeTitle}
+            fill
+            sizes="288px"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
+            <span
+              className="flex size-12 items-center justify-center rounded-full"
+              style={{ background: palette.gradient }}
             >
-              <div className="relative aspect-video w-full overflow-hidden">
-                <Image
-                  src={entry.animeImage}
-                  alt={entry.animeTitle}
-                  fill
-                  sizes="288px"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
-                  <span className="bg-brand-gradient flex size-12 items-center justify-center rounded-full">
-                    <Play className="size-5 fill-white text-white" />
-                  </span>
-                </div>
-                <div className="absolute inset-x-0 bottom-0 h-1.5 bg-black/50">
-                  <div
-                    className="bg-brand-gradient h-full"
-                    style={{ width: `${percent}%` }}
-                  />
-                </div>
-              </div>
-              <div className="p-3">
-                <h3 className="line-clamp-1 text-sm font-semibold">
-                  {entry.animeTitle}
-                </h3>
-                <p className="text-muted mt-0.5 text-xs">
-                  EP {entry.episodeNumber} · {percent}% assistido
-                </p>
-              </div>
-            </Link>
-          );
-        })}
-      </div>
-    </section>
+              <Play className="size-5 fill-white text-white" />
+            </span>
+          </div>
+        </div>
+        <div className="p-3">
+          <h3 className="line-clamp-1 text-sm font-semibold">{entry.animeTitle}</h3>
+          <EpisodeProgress
+            percent={percent}
+            episodeNumber={entry.episodeNumber}
+            accentColor={palette.primary}
+            className="mt-2"
+          />
+        </div>
+      </Link>
+    </motion.div>
   );
 }

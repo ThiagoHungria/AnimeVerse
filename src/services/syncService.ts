@@ -12,10 +12,12 @@ import {
   apiClient,
   type AnimeSummaryDto,
   type HistoryEntryDto,
+  type LibraryEntryDto,
 } from "./apiClient";
 import { useAuthStore } from "@/store/auth.store";
 import { useFavoritesStore } from "@/store/favorites.store";
 import { useHistoryStore } from "@/store/history.store";
+import { useLibraryStore, type LibraryList } from "@/store/library.store";
 import type { AnimeSummary, HistoryEntry } from "@/types";
 
 const isMalId = (id: string) => /^\d+$/.test(id);
@@ -62,12 +64,28 @@ async function pushLocalToServer(): Promise<void> {
         }),
       ),
   );
+
+  const library = useLibraryStore.getState();
+  const libraryEntries: { anime: AnimeSummary; list: LibraryList }[] = [
+    ...library.watching.map((anime) => ({ anime, list: "watching" as const })),
+    ...library.completed.map((anime) => ({ anime, list: "completed" as const })),
+    ...library.planned.map((anime) => ({ anime, list: "planned" as const })),
+  ];
+  await Promise.allSettled(
+    libraryEntries
+      .filter((e) => isMalId(e.anime.id))
+      .map((e) => apiClient.upsertLibrary(Number(e.anime.id), e.list)),
+  );
 }
 
 async function pullAndMerge(): Promise<void> {
-  const [favRes, histRes] = await Promise.all([
+  const [favRes, histRes, libRes] = await Promise.all([
     apiClient.getFavorites(1),
     apiClient.getHistory(1),
+    apiClient.getLibrary(1).catch(() => ({
+      data: [] as LibraryEntryDto[],
+      meta: { page: 1, limit: 50, total: 0, totalPages: 0 },
+    })),
   ]);
 
   const remoteFavs = favRes.data.map(dtoToSummary);
@@ -77,6 +95,10 @@ async function pullAndMerge(): Promise<void> {
   const remoteHist = histRes.data.map(dtoToHistory);
   const localHist = useHistoryStore.getState().entries;
   useHistoryStore.getState().replaceAll(mergeHistory(localHist, remoteHist));
+
+  const remoteLib = mergeLibraryEntries(libRes.data);
+  const localLib = useLibraryStore.getState();
+  useLibraryStore.getState().replaceAll(mergeLibrary(localLib, remoteLib));
 }
 
 function mergeFavorites(
@@ -170,4 +192,52 @@ export function syncHistoryAction(entry: HistoryEntry): void {
       duration: entry.duration,
     })
     .catch(() => undefined);
+}
+
+function mergeLibraryEntries(entries: LibraryEntryDto[]) {
+  const result: {
+    watching: AnimeSummary[];
+    completed: AnimeSummary[];
+    planned: AnimeSummary[];
+  } = { watching: [], completed: [], planned: [] };
+  for (const e of entries) {
+    const anime = dtoToSummary(e.anime);
+    if (e.list === "watching") result.watching.push(anime);
+    else if (e.list === "completed") result.completed.push(anime);
+    else if (e.list === "planned") result.planned.push(anime);
+  }
+  return result;
+}
+
+function mergeLibrary(
+  local: { watching: AnimeSummary[]; completed: AnimeSummary[]; planned: AnimeSummary[] },
+  remote: { watching: AnimeSummary[]; completed: AnimeSummary[]; planned: AnimeSummary[] },
+) {
+  const mergeList = (a: AnimeSummary[], b: AnimeSummary[]) => {
+    const map = new Map<string, AnimeSummary>();
+    for (const item of a) map.set(item.id, item);
+    for (const item of b) map.set(item.id, item);
+    return [...map.values()];
+  };
+  return {
+    watching: mergeList(local.watching, remote.watching),
+    completed: mergeList(local.completed, remote.completed),
+    planned: mergeList(local.planned, remote.planned),
+  };
+}
+
+/** Fire-and-forget: sync library list changes while logged in. */
+export function syncLibraryAction(
+  anime: AnimeSummary | null,
+  list: LibraryList,
+  removeAnimeId?: string,
+): void {
+  if (!isAuthenticated()) return;
+  if (removeAnimeId && isMalId(removeAnimeId)) {
+    void apiClient.removeLibrary(Number(removeAnimeId)).catch(() => undefined);
+    return;
+  }
+  if (anime && isMalId(anime.id)) {
+    void apiClient.upsertLibrary(Number(anime.id), list).catch(() => undefined);
+  }
 }

@@ -1,15 +1,16 @@
 "use client";
 
 import { useMemo } from "react";
-import { UserCircle2, Sparkles, RotateCcw } from "lucide-react";
+import { RotateCcw, Sparkles } from "lucide-react";
 import { useProfileStore } from "@/store/profile.store";
 import { useHydrated } from "@/hooks/useHydrated";
 import { useGenres } from "@/features/anime/hooks/useAnimeQueries";
 import { useRecommended } from "@/features/recommendations/hooks/useRecommendations";
-import { AnimeCard } from "@/features/anime/components/AnimeCard";
 import { GridSkeleton } from "@/components/ui/LoadingSkeleton";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { GamificationPanel } from "@/features/gamification/components/GamificationPanel";
+import { UserProfileCard } from "@/components/UserProfileCard";
+import { AnimeCardPremium } from "@/components/AnimeCardPremium";
 import { cn } from "@/utils/cn";
 
 export default function ProfilePage() {
@@ -22,7 +23,6 @@ export default function ProfilePage() {
   const { data: genres } = useGenres();
   const { recommendations, isLoading, personalized } = useRecommended(12);
 
-  // Top learned interests, derived from view/favorite affinity.
   const topInterests = useMemo(
     () =>
       Object.entries(genreScores)
@@ -34,13 +34,13 @@ export default function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-[1600px] px-4 py-8 md:px-8">
-      <div className="flex items-end justify-between gap-4">
+      <UserProfileCard />
+
+      <div className="mt-8 flex items-end justify-between gap-4">
         <div>
-          <h1 className="flex items-center gap-2 text-2xl font-bold md:text-3xl">
-            <UserCircle2 className="text-primary size-7" /> Seu perfil
-          </h1>
+          <h2 className="text-lg font-bold">Gêneros preferidos</h2>
           <p className="text-muted mt-1 text-sm">
-            Quanto mais você explora, mais inteligente fica a curadoria.
+            Selecione o que você curte para turbinar as recomendações.
           </p>
         </div>
         {hydrated &&
@@ -55,13 +55,8 @@ export default function ProfilePage() {
           )}
       </div>
 
-      {/* Preferred genres */}
-      <section className="border-border bg-surface/40 mt-8 rounded-2xl border p-5">
-        <h2 className="font-semibold">Gêneros preferidos</h2>
-        <p className="text-muted mt-1 text-sm">
-          Selecione o que você curte para turbinar as recomendações.
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
+      <section className="border-border bg-surface/40 mt-4 rounded-2xl border p-5">
+        <div className="flex flex-wrap gap-2">
           {(genres ?? []).map((genre) => {
             const active = preferredGenres.includes(genre);
             return (
@@ -86,7 +81,6 @@ export default function ProfilePage() {
 
       <GamificationPanel />
 
-      {/* Learned interests */}
       {hydrated && topInterests.length > 0 && (
         <section className="mt-6">
           <h2 className="text-muted mb-2 text-sm font-semibold uppercase tracking-wide">
@@ -105,17 +99,11 @@ export default function ProfilePage() {
         </section>
       )}
 
-      {/* Recommendations */}
       <section className="mt-10">
         <h2 className="flex items-center gap-2 text-lg font-bold">
           <Sparkles className="text-primary size-5" />
           {personalized ? "Recomendado para você" : "Sugestões para começar"}
         </h2>
-        <p className="text-muted mt-1 text-sm">
-          {personalized
-            ? "Com base nos seus gêneros e no que você explorou."
-            : "Curta alguns gêneros acima ou favorite animes para personalizar."}
-        </p>
 
         <div className="mt-6">
           {isLoading ? (
@@ -125,12 +113,12 @@ export default function ProfilePage() {
               icon={Sparkles}
               title="Sem recomendações ainda"
               description="Explore o catálogo para alimentarmos sua curadoria."
-              action={{ label: "Explorar agora", href: "/explore" }}
+              action={{ label: "Explorar agora", href: "/" }}
             />
           ) : (
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
               {recommendations.map((anime) => (
-                <AnimeCard key={anime.id} anime={anime} />
+                <AnimeCardPremium key={anime.id} anime={anime} />
               ))}
             </div>
           )}

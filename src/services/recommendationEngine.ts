@@ -191,6 +191,82 @@ export function getHiddenGemsForUser(
     .map((s) => s.anime);
 }
 
+/** "Porque você assistiu X" — genre overlap with last watched. */
+export function recommendBecauseYouWatched(
+  sourceTitle: string,
+  source: AnimeSummary,
+  pool: AnimeSummary[],
+  behavior: UserBehavior,
+  limit = 12,
+): AnimeSummary[] {
+  const exclude = new Set([
+    source.id,
+    ...behavior.favoriteIds,
+    ...behavior.watchedAnimeIds,
+  ]);
+  const sourceTraits = new Set(traitsOf(source));
+
+  return pool
+    .filter((a) => !exclude.has(a.id))
+    .map((a) => {
+      const overlap = traitsOf(a).filter((t) => sourceTraits.has(t)).length;
+      return {
+        anime: a,
+        score: overlap * 0.4 + compositeScore(a, behavior) * 0.6,
+      };
+    })
+    .filter((s) => s.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map((s) => s.anime);
+}
+
+/** "Parecidos com X" — similarity + taste. */
+export function recommendLike(
+  source: AnimeSummary,
+  pool: AnimeSummary[],
+  behavior: UserBehavior,
+  limit = 12,
+): AnimeSummary[] {
+  return recommendSimilar(source, pool, behavior, limit);
+}
+
+/** "Você provavelmente vai gostar" — high composite, unseen. */
+export function recommendProbablyLike(
+  pool: AnimeSummary[],
+  behavior: UserBehavior,
+  limit = 12,
+): AnimeSummary[] {
+  const exclude = new Set([
+    ...behavior.favoriteIds,
+    ...behavior.watchedAnimeIds,
+  ]);
+  return rankPool(pool, behavior, { exclude, limit });
+}
+
+/** Alta avaliação mas pouco conhecido. */
+export function recommendHighRatedObscure(
+  pool: AnimeSummary[],
+  behavior: UserBehavior,
+  limit = 12,
+): AnimeSummary[] {
+  const exclude = new Set([
+    ...behavior.favoriteIds,
+    ...behavior.watchedAnimeIds,
+  ]);
+  return pool
+    .filter((a) => !exclude.has(a.id))
+    .filter((a) => a.rating >= 7.5)
+    .filter((a) => !a.popularity || a.popularity > 500)
+    .map((a) => ({
+      anime: a,
+      score: malQuality(a) * 0.7 + (1 - popularityScore(a)) * 0.3,
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map((s) => s.anime);
+}
+
 /** Build all home feed sections from one pool fetch. */
 export function buildHomeFeeds(
   pool: AnimeSummary[],

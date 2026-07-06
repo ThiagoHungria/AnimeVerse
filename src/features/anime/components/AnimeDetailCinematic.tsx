@@ -17,6 +17,7 @@ import { paletteToCssVars } from "@/utils/colorSystem";
 import { fade, pulseGlow, staggerContainer, staggerItem } from "@/utils/animation";
 import { RatingBadge } from "@/components/ui/RatingBadge";
 import { FavoriteButton } from "./FavoriteButton";
+import { LibraryButton } from "./LibraryButton";
 import { SmartTags } from "./SmartTags";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 
@@ -166,6 +167,7 @@ export function AnimeDetailCinematic({
               )}
               <FavoriteButton anime={anime} variant="full" />
             </div>
+            <LibraryButton anime={anime} />
           </motion.div>
         </motion.div>
 

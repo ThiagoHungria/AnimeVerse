@@ -23,6 +23,21 @@ export interface Episode {
   recap?: boolean;
 }
 
+export interface AnimeCharacter {
+  id: string;
+  name: string;
+  image: string;
+  role: string;
+  voiceActor?: string;
+}
+
+export interface AnimeStaffMember {
+  id: string;
+  name: string;
+  image: string;
+  positions: string[];
+}
+
 /** Fields shared by list summaries and full detail objects. */
 export interface AnimeBase {
   /** Stable id used in routes (string form of the MAL id). */
