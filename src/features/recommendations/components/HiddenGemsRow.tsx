@@ -25,8 +25,8 @@ export function HiddenGemsRow() {
 
   return (
     <AnimeCarousel
-      title="Joias escondidas"
-      eyebrow="Nota alta · pouco descobertas"
+      title="Hidden gems"
+      eyebrow="Joias escondidas · nota alta"
       animes={hiddenGems}
     />
   );

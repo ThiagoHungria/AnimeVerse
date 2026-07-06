@@ -1,7 +1,8 @@
 "use client";
 
-import { HeroSection } from "@/features/anime/components/HeroSection";
+import { CinematicHero } from "@/features/anime/components/CinematicHero";
 import { AnimeCarousel } from "@/features/anime/components/AnimeCarousel";
+import { AnimatedSection } from "@/features/anime/components/AnimatedSection";
 import {
   useFeatured,
   useTrending,
@@ -9,12 +10,11 @@ import {
   useTopRated,
   useSeasonNow,
 } from "@/features/anime/hooks/useAnimeQueries";
-import {
-  HeroSkeleton,
-  CarouselSkeleton,
-} from "@/components/ui/LoadingSkeleton";
+import { HeroCinematicSkeleton } from "@/components/ui/CinematicSkeleton";
+import { CarouselSkeleton } from "@/components/ui/LoadingSkeleton";
 import { ContinueWatchingRow } from "@/features/profile/components/ContinueWatchingRow";
 import { RecommendedRow } from "@/features/recommendations/components/RecommendedRow";
+import { TasteBasedRow } from "@/features/recommendations/components/TasteBasedRow";
 import { HiddenGemsRow } from "@/features/recommendations/components/HiddenGemsRow";
 import type { AnimeSummary } from "@/types";
 
@@ -26,39 +26,43 @@ export default function HomePage() {
   const season = useSeasonNow();
 
   return (
-    <div className="pb-16">
+    <div className="pb-20">
       {loadingFeatured || !featured ? (
-        <HeroSkeleton />
+        <HeroCinematicSkeleton />
       ) : (
-        <HeroSection anime={featured} />
+        <CinematicHero anime={featured} />
       )}
 
-      <div className="mt-10 space-y-10">
-        <ContinueWatchingRow />
-        <RecommendedRow />
+      <div className="mt-12 space-y-12">
+        <AnimatedSection>
+          <ContinueWatchingRow />
+        </AnimatedSection>
 
-        <Row
-          title="Em alta agora"
-          eyebrow="Trending"
+        <RecommendedRow />
+        <TasteBasedRow />
+
+        <FeedRow
+          title="Trending agora"
+          eyebrow="Em alta no mundo"
           loading={trending.isLoading}
           animes={trending.data}
         />
-        <Row
+        <FeedRow
           title="Mais populares"
           eyebrow="Favoritos do público"
           loading={popular.isLoading}
           animes={popular.data}
         />
-        <Row
+        <FeedRow
           title="Mais bem avaliados"
-          eyebrow="Nota máxima"
+          eyebrow="Nota máxima MAL"
           loading={topRated.isLoading}
           animes={topRated.data}
         />
         <HiddenGemsRow />
-        <Row
+        <FeedRow
           title="Temporada atual"
-          eyebrow="No ar"
+          eyebrow="No ar agora"
           loading={season.isLoading}
           animes={season.data}
         />
@@ -67,7 +71,7 @@ export default function HomePage() {
   );
 }
 
-function Row({
+function FeedRow({
   title,
   eyebrow,
   loading,
@@ -81,7 +85,7 @@ function Row({
   if (loading) {
     return (
       <div className="space-y-3 px-4 md:px-8">
-        <div className="bg-card h-6 w-44 animate-pulse rounded" />
+        <div className="bg-card h-7 w-48 animate-pulse rounded" />
         <CarouselSkeleton />
       </div>
     );
