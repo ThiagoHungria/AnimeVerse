@@ -74,7 +74,7 @@ export function AnimeDetailCinematic({
           <motion.div
             variants={staggerItem}
             className="relative aspect-[2/3] w-44 shrink-0 overflow-hidden rounded-2xl border border-white/15 shadow-[var(--anime-glow)] md:w-56"
-            style={{ boxShadow: palette.glow }}
+            style={{ viewTransitionName: `anime-poster-${anime.id}`, boxShadow: palette.glow }}
           >
             {anime.image && (
               <Image

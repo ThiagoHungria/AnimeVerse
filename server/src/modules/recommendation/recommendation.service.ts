@@ -3,10 +3,8 @@ import { CacheService } from "../../common/cache/cache.service";
 import { PrismaService } from "../../prisma/prisma.service";
 import { AnimeCacheService } from "../anime/anime-cache.service";
 import { jikanClient } from "../../services/jikan.service";
-import {
-  buildTasteProfile,
-  recommend,
-} from "../../services/recommendation.service";
+import { recommendWithEmbeddings } from "../../services/embedding.service";
+import { buildTasteProfile } from "../../services/recommendation.service";
 
 @Injectable()
 export class RecommendationEngineService {
@@ -62,7 +60,7 @@ export class RecommendationEngineService {
     const pool = await jikanClient.getPool(30);
     await this.animeCache.upsertMany(pool);
 
-    const recommended = recommend(pool, profile, excludeIds, 18);
+    const recommended = recommendWithEmbeddings(pool, profile, excludeIds, 18);
     const ids = recommended.map((a) => a.id);
 
     // Persist to DB cache table + memory cache.

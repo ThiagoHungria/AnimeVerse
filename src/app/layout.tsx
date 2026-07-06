@@ -16,7 +16,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://anime-verse-khaki.vercel.app";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: "AnimeVerse — Streaming de Animes",
     template: "%s · AnimeVerse",
@@ -25,6 +29,15 @@ export const metadata: Metadata = {
     "AnimeVerse: assista, descubra e acompanhe seus animes favoritos. Catálogo completo, episódios, favoritos e histórico em uma experiência premium.",
   applicationName: "AnimeVerse",
   manifest: "/manifest.webmanifest",
+  openGraph: {
+    siteName: "AnimeVerse",
+    type: "website",
+    locale: "pt_BR",
+  },
+  twitter: {
+    card: "summary_large_image",
+    creator: "@AnimeVerse",
+  },
   appleWebApp: {
     capable: true,
     title: "AnimeVerse",

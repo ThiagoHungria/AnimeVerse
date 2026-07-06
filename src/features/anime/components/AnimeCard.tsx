@@ -53,7 +53,8 @@ export function AnimeCard({
     >
       <Link
         href={`/anime/${anime.id}`}
-        className="group relative block h-full overflow-hidden rounded-xl border border-white/10 bg-card shadow-lg shadow-black/30 transition-shadow duration-300 hover:border-white/20 hover:shadow-2xl hover:shadow-black/50"
+        className="vt-link group relative block h-full overflow-hidden rounded-xl border border-white/10 bg-card shadow-lg shadow-black/30 transition-shadow duration-300 hover:border-white/20 hover:shadow-2xl hover:shadow-black/50"
+        style={{ viewTransitionName: `anime-poster-${anime.id}` }}
       >
         <div className="relative aspect-[2/3] w-full overflow-hidden">
           {anime.image ? (

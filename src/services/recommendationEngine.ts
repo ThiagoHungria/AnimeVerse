@@ -13,6 +13,7 @@ import {
   similarityScore,
   type TasteProfile,
 } from "@/services/intelligenceEngine";
+import { embeddingAffinity, buildVocabulary } from "@/utils/embeddings";
 
 export interface UserBehavior {
   tasteProfile: TasteProfile;
@@ -56,18 +57,28 @@ function tasteAffinity(anime: AnimeSummary, profile: TasteProfile): number {
   return sum / traits.length;
 }
 
-function compositeScore(anime: AnimeSummary, behavior: UserBehavior): number {
+function compositeScore(
+  anime: AnimeSummary,
+  behavior: UserBehavior,
+  vocab?: string[],
+): number {
   const taste = tasteAffinity(anime, behavior.tasteProfile);
   const quality = malQuality(anime);
   const pop = popularityScore(anime);
   const interaction = interactionBoost(anime, behavior);
   const hasTaste = Object.keys(behavior.tasteProfile).length > 0;
+  const emb =
+    hasTaste && vocab
+      ? embeddingAffinity(anime, behavior.tasteProfile, vocab)
+      : 0;
 
   if (!hasTaste) {
     return quality * 0.6 + pop * 0.4;
   }
 
-  return taste * 0.45 + quality * 0.3 + pop * 0.15 + interaction * 0.1;
+  return (
+    emb * 0.35 + taste * 0.3 + quality * 0.2 + pop * 0.1 + interaction * 0.05
+  );
 }
 
 function rankPool(
@@ -76,9 +87,13 @@ function rankPool(
   options: { exclude?: Set<string>; limit?: number } = {},
 ): AnimeSummary[] {
   const exclude = options.exclude ?? new Set<string>();
+  const vocab = buildVocabulary(pool);
   return pool
     .filter((a) => !exclude.has(a.id))
-    .map((a) => ({ anime: a, score: compositeScore(a, behavior) }))
+    .map((a) => ({
+      anime: a,
+      score: compositeScore(a, behavior, vocab),
+    }))
     .sort((a, b) => b.score - a.score)
     .slice(0, options.limit ?? 18)
     .map((s) => s.anime);
@@ -131,12 +146,13 @@ export function recommendSimilar(
   limit = 12,
 ): AnimeSummary[] {
   const base = findSimilar(target, pool, limit * 2);
+  const vocab = buildVocabulary(pool);
   return base
     .map((a) => ({
       anime: a,
       score:
-        similarityScore(target, a) * 0.7 +
-        compositeScore(a, behavior) * 0.3,
+        similarityScore(target, a) * 0.5 +
+        compositeScore(a, behavior, vocab) * 0.5,
     }))
     .sort((a, b) => b.score - a.score)
     .slice(0, limit)

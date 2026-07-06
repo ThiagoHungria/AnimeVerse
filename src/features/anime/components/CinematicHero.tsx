@@ -1,32 +1,47 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { Play, Info, Sparkles } from "lucide-react";
 import type { AnimeSummary } from "@/types";
 import { useDominantColor } from "@/hooks/useDominantColor";
 import { paletteToCssVars } from "@/utils/colorSystem";
-import { heroKenBurns, pulseGlow, fade } from "@/utils/animation";
+import { pulseGlow, fade } from "@/utils/animation";
 import { RatingBadge } from "@/components/ui/RatingBadge";
 import { FavoriteButton } from "./FavoriteButton";
 import { SmartTags } from "./SmartTags";
 
-/** Cinematic full-bleed hero with dynamic palette and living background. */
+/** Cinematic hero with parallax scroll, dynamic palette and living background. */
 export function CinematicHero({ anime }: { anime: AnimeSummary }) {
+  const ref = useRef<HTMLElement>(null);
   const palette = useDominantColor(anime.banner || anime.image, anime.id);
   const cssVars = paletteToCssVars(palette) as React.CSSProperties;
 
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "28%"]);
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1.08, 1.22]);
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0.15]);
+
   return (
     <section
-      className="relative h-[68vh] max-h-[640px] min-h-[440px] w-full overflow-hidden md:rounded-b-3xl"
+      ref={ref}
+      className="relative h-[72vh] max-h-[680px] min-h-[460px] w-full overflow-hidden md:rounded-b-3xl"
       style={cssVars}
     >
       <motion.div
-        className="absolute inset-0"
-        variants={heroKenBurns}
-        initial="initial"
-        animate="animate"
+        className="absolute inset-0 will-change-transform"
+        style={{ y: imageY, scale: imageScale }}
       >
         <Image
           src={anime.banner}
@@ -42,7 +57,7 @@ export function CinematicHero({ anime }: { anime: AnimeSummary }) {
         className="absolute inset-0 opacity-70"
         style={{ background: palette.gradient, mixBlendMode: "multiply" }}
       />
-      <div className="from-background via-background/75 absolute inset-0 bg-gradient-to-t to-transparent" />
+      <div className="from-background via-background/75 absolute inset-0 bg-gradient-to-t to-transparent cinematic-vignette" />
       <div className="from-background/95 via-background/40 absolute inset-0 bg-gradient-to-r to-transparent" />
 
       <motion.div
@@ -55,6 +70,7 @@ export function CinematicHero({ anime }: { anime: AnimeSummary }) {
 
       <motion.div
         className="absolute inset-x-0 bottom-0 px-4 pb-10 md:px-8 md:pb-14"
+        style={{ y: contentY, opacity: contentOpacity }}
         variants={fade}
         initial="hidden"
         animate="visible"
@@ -77,7 +93,10 @@ export function CinematicHero({ anime }: { anime: AnimeSummary }) {
             </span>
           </div>
 
-          <h1 className="text-4xl font-black tracking-tight drop-shadow-lg md:text-6xl">
+          <h1
+            className="text-4xl font-black tracking-tight drop-shadow-lg md:text-6xl"
+            style={{ viewTransitionName: `hero-title-${anime.id}` }}
+          >
             {anime.title}
           </h1>
 
@@ -100,7 +119,8 @@ export function CinematicHero({ anime }: { anime: AnimeSummary }) {
             </Link>
             <Link
               href={`/anime/${anime.id}`}
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-sm font-semibold backdrop-blur-md transition-colors hover:bg-white/15"
+              className="vt-link inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-sm font-semibold backdrop-blur-md transition-colors hover:bg-white/15"
+              style={{ viewTransitionName: `anime-poster-${anime.id}` }}
             >
               <Info className="size-5" /> Detalhes
             </Link>
@@ -112,5 +132,4 @@ export function CinematicHero({ anime }: { anime: AnimeSummary }) {
   );
 }
 
-/** Back-compat alias. */
 export const HeroSection = CinematicHero;

@@ -6,6 +6,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { SyncOnAuth } from "@/components/sync/SyncOnAuth";
 import { AchievementToast } from "@/features/gamification/components/AchievementToast";
 import { GamificationBoot } from "@/features/gamification/components/GamificationBoot";
+import { ViewTransitionProvider } from "@/components/layout/ViewTransitionProvider";
 
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
@@ -29,6 +30,7 @@ export function Providers({ children }: { children: ReactNode }) {
 
   const tree = (
     <QueryClientProvider client={client}>
+      <ViewTransitionProvider />
       <GamificationBoot />
       <SyncOnAuth />
       <AchievementToast />
