@@ -14,6 +14,7 @@ interface AuthState {
   refreshToken: string | null;
   isAuthenticated: boolean;
   login: (user: AuthUser, tokens: TokenPair) => void;
+  updateTokens: (tokens: TokenPair) => void;
   logout: () => Promise<void>;
   hydrateClient: () => void;
 }
@@ -33,6 +34,14 @@ export const useAuthStore = create<AuthState>()(
           accessToken: tokens.accessToken,
           refreshToken: tokens.refreshToken,
           isAuthenticated: true,
+        });
+      },
+
+      updateTokens: (tokens) => {
+        apiClient.setAccessToken(tokens.accessToken);
+        set({
+          accessToken: tokens.accessToken,
+          refreshToken: tokens.refreshToken,
         });
       },
 
@@ -67,3 +76,11 @@ export const useAuthStore = create<AuthState>()(
     },
   ),
 );
+
+apiClient.setAuthHandlers({
+  getRefreshToken: () => useAuthStore.getState().refreshToken,
+  onTokensRefreshed: (tokens) => useAuthStore.getState().updateTokens(tokens),
+  onRefreshFailed: () => {
+    void useAuthStore.getState().logout();
+  },
+});

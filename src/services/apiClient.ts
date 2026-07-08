@@ -40,8 +40,32 @@ export interface ApiError {
   statusCode: number;
 }
 
+export interface AuthHandlers {
+  getRefreshToken: () => string | null;
+  onTokensRefreshed: (tokens: TokenPair) => void;
+  onRefreshFailed: () => void;
+}
+
+/** Shared across all ApiClient instances — only one refresh in flight. */
+let refreshPromise: Promise<TokenPair> | null = null;
+
+/** @internal Resets in-flight refresh state between tests. */
+export function resetRefreshPromiseForTests() {
+  refreshPromise = null;
+}
+
+function isApiError(err: unknown): err is ApiError {
+  return (
+    typeof err === "object" &&
+    err !== null &&
+    "statusCode" in err &&
+    typeof (err as ApiError).statusCode === "number"
+  );
+}
+
 export class ApiClient {
   private accessToken: string | null = null;
+  private authHandlers: AuthHandlers | null = null;
 
   setAccessToken(token: string | null) {
     this.accessToken = token;
@@ -51,10 +75,37 @@ export class ApiClient {
     return this.accessToken;
   }
 
+  setAuthHandlers(handlers: AuthHandlers) {
+    this.authHandlers = handlers;
+  }
+
+  private async ensureRefreshed(refreshToken: string): Promise<void> {
+    if (!refreshPromise) {
+      refreshPromise = this.refresh(refreshToken)
+        .then((tokens) => {
+          this.setAccessToken(tokens.accessToken);
+          this.authHandlers?.onTokensRefreshed(tokens);
+          return tokens;
+        })
+        .catch((err: unknown) => {
+          if (isApiError(err) && err.statusCode === 401) {
+            this.authHandlers?.onRefreshFailed();
+          }
+          throw err;
+        })
+        .finally(() => {
+          refreshPromise = null;
+        });
+    }
+    await refreshPromise;
+  }
+
   async request<T>(
     path: string,
     options: RequestInit = {},
+    retried = false,
   ): Promise<T> {
+    const hadAccessToken = Boolean(this.accessToken);
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
       ...(options.headers as Record<string, string>),
@@ -70,10 +121,30 @@ export class ApiClient {
 
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
-      throw {
+      const error = {
         message: body.message ?? res.statusText,
         statusCode: res.status,
       } satisfies ApiError;
+
+      if (
+        res.status === 401 &&
+        !retried &&
+        !path.startsWith("/auth/") &&
+        hadAccessToken &&
+        this.authHandlers
+      ) {
+        const refreshToken = this.authHandlers.getRefreshToken();
+        if (refreshToken) {
+          try {
+            await this.ensureRefreshed(refreshToken);
+            return this.request<T>(path, options, true);
+          } catch {
+            throw error;
+          }
+        }
+      }
+
+      throw error;
     }
 
     return res.json() as Promise<T>;
