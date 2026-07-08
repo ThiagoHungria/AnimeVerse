@@ -50,3 +50,6 @@ next-env.d.ts
 
 .vercel
 .env*
+!.env.example
+!.env.local.example
+!server/.env.example

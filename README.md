@@ -110,6 +110,41 @@ O **perfil de gosto** (`store/profile.store.ts`) aprende com favoritos (peso 3),
 
 ## 🚀 Como rodar
 
+### 1. Configurar ambiente
+
+```bash
+# Frontend
+cp .env.example .env.local
+
+# Backend (requer Docker para Postgres + Redis)
+cp server/.env.example server/.env
+# Edite JWT_ACCESS_SECRET antes de usar em produção
+```
+
+| Variável | Onde | Obrigatória | Descrição |
+|----------|------|-------------|-----------|
+| `NEXT_PUBLIC_API_URL` | `.env.local` | Para auth/sync | URL da API NestJS |
+| `NEXT_PUBLIC_SITE_URL` | `.env.local` | Não | URL pública do site (SEO/OG) |
+| `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | `.env.local` | Não | Google OAuth (deve coincidir com o backend) |
+| `NEXT_PUBLIC_MAL_CLIENT_ID` | `.env.local` | Não | MAL API oficial; sem ela usa Jikan |
+| `DATABASE_URL` | `server/.env` | Sim (backend) | PostgreSQL |
+| `JWT_ACCESS_SECRET` | `server/.env` | Sim (backend) | Segredo do JWT |
+| `GOOGLE_CLIENT_ID` | `server/.env` | Para Google login | Mesmo ID do frontend |
+| `CORS_ORIGINS` | `server/.env` | Sim (backend) | Origens permitidas (ex.: `http://localhost:3000`) |
+| `REDIS_URL` | `server/.env` | Não | Cache; sem ele usa memória |
+
+### 2. Subir infraestrutura e API (opcional)
+
+Com auth, favoritos, histórico e sync multi-dispositivo:
+
+```bash
+npm run db:up          # Postgres + Redis via Docker
+npm run db:migrate     # aplica migrations Prisma
+npm run dev:server     # API em http://localhost:3001
+```
+
+### 3. Frontend
+
 ```bash
 npm install
 npm run dev      # http://localhost:3000
