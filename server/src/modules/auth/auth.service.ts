@@ -3,6 +3,7 @@ import {
   Injectable,
   UnauthorizedException,
   BadRequestException,
+  Logger,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
@@ -19,6 +20,8 @@ export interface TokenPair {
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
@@ -43,21 +46,36 @@ export class AuthService {
     });
 
     const tokens = await this.issueTokens(user.id, user.email, user.name);
+    this.logger.log({
+      event: "auth_register_success",
+      userId: user.id,
+      email: user.email,
+    });
     return { user, ...tokens };
   }
 
   async login(dto: LoginDto) {
+    const email = dto.email.toLowerCase();
     const user = await this.prisma.user.findUnique({
-      where: { email: dto.email.toLowerCase() },
+      where: { email },
     });
     if (!user || !user.passwordHash) {
+      this.logger.warn({ event: "auth_login_failed", email });
       throw new UnauthorizedException("Invalid credentials");
     }
 
     const valid = await bcrypt.compare(dto.password, user.passwordHash);
-    if (!valid) throw new UnauthorizedException("Invalid credentials");
+    if (!valid) {
+      this.logger.warn({ event: "auth_login_failed", email });
+      throw new UnauthorizedException("Invalid credentials");
+    }
 
     const tokens = await this.issueTokens(user.id, user.email, user.name);
+    this.logger.log({
+      event: "auth_login_success",
+      userId: user.id,
+      email: user.email,
+    });
     return {
       user: {
         id: user.id,
@@ -76,19 +94,31 @@ export class AuthService {
       include: { user: true },
     });
     if (!stored || stored.expiresAt < new Date()) {
+      this.logger.warn({ event: "auth_refresh_failed", userId: stored?.userId });
       throw new UnauthorizedException("Invalid refresh token");
     }
 
     await this.prisma.refreshToken.delete({ where: { id: stored.id } });
-    return this.issueTokens(
+    const tokens = await this.issueTokens(
       stored.user.id,
       stored.user.email,
       stored.user.name,
     );
+    this.logger.log({
+      event: "auth_refresh_success",
+      userId: stored.user.id,
+    });
+    return tokens;
   }
 
   async logout(refreshToken: string) {
-    await this.prisma.refreshToken.deleteMany({ where: { token: refreshToken } });
+    const result = await this.prisma.refreshToken.deleteMany({
+      where: { token: refreshToken },
+    });
+    this.logger.log({
+      event: "auth_logout",
+      revokedTokens: result.count,
+    });
     return { success: true };
   }
 
@@ -134,6 +164,12 @@ export class AuthService {
     }
 
     const tokens = await this.issueTokens(user.id, user.email, user.name);
+    this.logger.log({
+      event: "auth_google_success",
+      userId: user.id,
+      email: user.email,
+      provider: "google",
+    });
     return {
       user: {
         id: user.id,

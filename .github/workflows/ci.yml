@@ -36,6 +36,7 @@ jobs:
           cache-dependency-path: server/package-lock.json
       - run: npm ci --include=dev
       - run: npx prisma generate
+      - run: npm test
       - run: npm run build
 
   deploy:

@@ -10,10 +10,10 @@
 
 import {
   apiClient,
-  type AnimeSummaryDto,
   type HistoryEntryDto,
   type LibraryEntryDto,
 } from "./apiClient";
+import { dtoToSummary } from "./dtoMappers";
 import { useAuthStore } from "@/store/auth.store";
 import { useFavoritesStore } from "@/store/favorites.store";
 import { useHistoryStore } from "@/store/history.store";
@@ -126,30 +126,6 @@ function mergeHistory(
   return [...map.values()]
     .sort((a, b) => b.updatedAt - a.updatedAt)
     .slice(0, 50);
-}
-
-function dtoToSummary(d: AnimeSummaryDto): AnimeSummary {
-  return {
-    id: d.id,
-    malId: d.malId,
-    title: d.title,
-    titleEnglish: d.titleEnglish,
-    description: d.description,
-    image: d.image,
-    banner: d.banner,
-    rating: d.rating,
-    genres: d.genres,
-    themes: d.themes ?? [],
-    demographics: [],
-    smartTags: [],
-    studios: [],
-    status: "unknown",
-    statusLabel: "Desconhecido",
-    episodeCount: d.episodeCount,
-    year: d.year,
-    season: d.season,
-    source: (d.source as AnimeSummary["source"]) ?? "jikan",
-  };
 }
 
 function dtoToHistory(d: HistoryEntryDto): HistoryEntry {

@@ -291,6 +291,20 @@ export interface UserProfile extends AuthUser {
   _count?: { favorites: number; watchHistory: number };
 }
 
+export type RecommendationReasonType =
+  | "genre_similar"
+  | "theme_similar"
+  | "similar_users"
+  | "high_rating"
+  | "trending";
+
+export interface RecommendationReason {
+  type: RecommendationReasonType;
+  sourceAnimeId?: number;
+  sourceTitle?: string;
+  label: string;
+}
+
 export interface AnimeSummaryDto {
   id: string;
   malId: number;
@@ -306,6 +320,21 @@ export interface AnimeSummaryDto {
   year?: number;
   season?: string;
   source: string;
+  /**
+   * Additive fields sent by /recommendations (backend engine). Optional so any
+   * other consumer of AnimeSummaryDto stays unaffected. smartTags/demographics/
+   * studios are intentionally NOT here — those come from client-side hydration.
+   */
+  rank?: number;
+  popularity?: number;
+  status?: string | null;
+  type?: string | null;
+  /** Final blended recommendation score (0-1). */
+  score?: number;
+  /** Whether the anime is part of the current trending pool. */
+  trending?: boolean;
+  /** Optional recommendation explanations (populated only by /recommendations). */
+  reasons?: RecommendationReason[];
 }
 
 export interface HistoryPayload {

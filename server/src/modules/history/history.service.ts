@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { paginate, parsePagination } from "../../common/utils/pagination";
 import { PrismaService } from "../../prisma/prisma.service";
 import { AnimeCacheService } from "../anime/anime-cache.service";
+import { RecommendationCacheService } from "../recommendation/recommendation-cache.service";
 import { jikanClient } from "../../services/jikan.service";
 import type { HistoryDto } from "./dto/history.dto";
 
@@ -10,6 +11,7 @@ export class HistoryService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly animeCache: AnimeCacheService,
+    private readonly recoCache: RecommendationCacheService,
   ) {}
 
   async record(userId: string, dto: HistoryDto) {
@@ -48,6 +50,9 @@ export class HistoryService {
         update: { totalWatchTime: { increment: 5 } },
       });
     }
+
+    // Watch history feeds the behavioural signal — drop stale recommendations.
+    await this.recoCache.invalidateUser(userId);
 
     return entry;
   }

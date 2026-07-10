@@ -3,6 +3,12 @@
 import { useMemo } from "react";
 import { useDiscoveryPool } from "@/features/anime/hooks/useAnimeQueries";
 import { useUserBehavior } from "@/features/recommendations/hooks/useUserBehavior";
+import { useBackendRecommended } from "@/features/recommendations/hooks/useBackendRecommended";
+import {
+  getRecoSource,
+  selectRecommended,
+} from "@/features/recommendations/lib/recommendationSource";
+import { useAuthStore } from "@/store/auth.store";
 import {
   recommendForYou,
   recommendByTaste,
@@ -12,9 +18,16 @@ import {
   buildDiscoveryCollections,
 } from "@/services/intelligenceEngine";
 
+/**
+ * "For you" feed. Backed by the client engine by default; switches to the
+ * backend recommendation API only when the flag is on, the user is authenticated
+ * and the backend returns data (see `selectRecommended`). The return shape is
+ * unchanged so consuming components need no modification.
+ */
 export function useRecommended(limit = 18) {
   const { data: pool, isLoading } = useDiscoveryPool();
   const behavior = useUserBehavior();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
   const recommendations = useMemo(() => {
     if (!pool) return [];
@@ -25,7 +38,14 @@ export function useRecommended(limit = 18) {
     Object.keys(behavior.tasteProfile).length > 0 ||
     behavior.watchedAnimeIds.size > 0;
 
-  return { recommendations, isLoading, personalized };
+  const backend = useBackendRecommended(limit);
+
+  return selectRecommended({
+    source: getRecoSource(),
+    isAuthenticated,
+    backend,
+    client: { recommendations, isLoading, personalized },
+  });
 }
 
 export function useTasteBased(limit = 18) {

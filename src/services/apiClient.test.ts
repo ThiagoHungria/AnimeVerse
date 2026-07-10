@@ -150,3 +150,49 @@ describe("apiClient auth refresh", () => {
     expect(onTokensRefreshed).not.toHaveBeenCalled();
   });
 });
+
+describe("apiClient getRecommendations", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("returns items carrying reasons, score and trending", async () => {
+    const payload = [
+      {
+        id: "1",
+        malId: 1,
+        title: "Rec Anime",
+        description: "",
+        image: "img.png",
+        banner: "banner.png",
+        rating: 8.2,
+        genres: ["Action"],
+        themes: [],
+        episodeCount: 24,
+        source: "jikan",
+        rank: 12,
+        popularity: 40,
+        status: "airing",
+        type: "TV",
+        score: 0.87,
+        trending: true,
+        reasons: [{ type: "genre_similar", label: "Combina com seus gêneros" }],
+      },
+    ];
+
+    const fetchMock = vi.fn().mockResolvedValueOnce(jsonResponse(payload));
+    vi.stubGlobal("fetch", fetchMock);
+
+    const client = new ApiClient();
+    client.setAccessToken("access-token");
+    const result = await client.getRecommendations("user-1");
+
+    expect(fetchMock.mock.calls[0][0]).toBe(`${API_URL}/recommendations/user-1`);
+    expect(result).toHaveLength(1);
+    expect(result[0].score).toBe(0.87);
+    expect(result[0].trending).toBe(true);
+    expect(result[0].reasons).toEqual([
+      { type: "genre_similar", label: "Combina com seus gêneros" },
+    ]);
+  });
+});

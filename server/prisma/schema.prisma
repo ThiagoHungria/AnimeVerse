@@ -24,6 +24,7 @@ model User {
   libraryEntries       LibraryEntry[]
   refreshTokens        RefreshToken[]
   recommendationCaches RecommendationCache[]
+  ratings              UserRating[]
 
   @@map("users")
 }
@@ -75,6 +76,7 @@ model Anime {
   favorites    Favorite[]
   watchHistory WatchHistory[]
   libraryEntries LibraryEntry[]
+  ratings      UserRating[]
 
   @@map("animes")
 }
@@ -123,6 +125,23 @@ model WatchHistory {
   @@unique([userId, animeId, episodeId])
   @@index([userId, updatedAt])
   @@map("watch_history")
+}
+
+/// Explicit anime rating given by a user (1-10). Feeds the recommendation
+/// engine's rating signal. Not yet wired into the algorithm (FASE 2.1).
+model UserRating {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  animeId   Int      @map("anime_id")
+  score     Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  anime     Anime    @relation(fields: [animeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, animeId])
+  @@index([userId])
+  @@map("user_ratings")
 }
 
 model RecommendationCache {

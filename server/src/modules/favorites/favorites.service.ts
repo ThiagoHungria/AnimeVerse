@@ -6,6 +6,7 @@ import {
 import { paginate, parsePagination } from "../../common/utils/pagination";
 import { PrismaService } from "../../prisma/prisma.service";
 import { AnimeCacheService } from "../anime/anime-cache.service";
+import { RecommendationCacheService } from "../recommendation/recommendation-cache.service";
 import { jikanClient } from "../../services/jikan.service";
 
 @Injectable()
@@ -13,6 +14,7 @@ export class FavoritesService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly animeCache: AnimeCacheService,
+    private readonly recoCache: RecommendationCacheService,
   ) {}
 
   async add(userId: string, animeId: number) {
@@ -23,10 +25,13 @@ export class FavoritesService {
     });
     if (existing) throw new ConflictException("Already favorited");
 
-    return this.prisma.favorite.create({
+    const favorite = await this.prisma.favorite.create({
       data: { userId, animeId },
       include: { anime: true },
     });
+    // Favorites are a strong taste signal — drop stale recommendations.
+    await this.recoCache.invalidateUser(userId);
+    return favorite;
   }
 
   async remove(userId: string, animeId: number) {
@@ -35,6 +40,7 @@ export class FavoritesService {
     });
     if (!fav) throw new NotFoundException("Favorite not found");
     await this.prisma.favorite.delete({ where: { id: fav.id } });
+    await this.recoCache.invalidateUser(userId);
     return { success: true };
   }
 

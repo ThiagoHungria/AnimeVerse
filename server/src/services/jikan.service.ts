@@ -48,10 +48,16 @@ interface JikanAnime {
 
 const BASE = "https://api.jikan.moe/v4";
 const MIN_GAP = 450;
+/** Jikan caps `limit` at 25; requesting more returns HTTP 400. */
+const MAX_LIMIT = 25;
 let lastAt = 0;
 let chain: Promise<unknown> = Promise.resolve();
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/** Clamp any requested page size into Jikan's accepted [1, 25] range. */
+const clampLimit = (n: number): number =>
+  Math.min(Math.max(1, Math.trunc(n || 0)), MAX_LIMIT);
 
 async function jget<T>(path: string): Promise<T> {
   const run = chain.then(async () => {
@@ -101,14 +107,14 @@ function map(raw: JikanAnime): ExternalAnimeDto {
 export const jikanClient = {
   async getTrending(limit = 18): Promise<ExternalAnimeDto[]> {
     const res = await jget<{ data: JikanAnime[] }>(
-      `/top/anime?filter=airing&limit=${limit}&sfw=true`,
+      `/top/anime?filter=airing&limit=${clampLimit(limit)}&sfw=true`,
     );
     return res.data.map(map);
   },
 
   async getPopular(limit = 18): Promise<ExternalAnimeDto[]> {
     const res = await jget<{ data: JikanAnime[] }>(
-      `/top/anime?filter=bypopularity&limit=${limit}&sfw=true`,
+      `/top/anime?filter=bypopularity&limit=${clampLimit(limit)}&sfw=true`,
     );
     return res.data.map(map);
   },
@@ -120,16 +126,17 @@ export const jikanClient = {
 
   async search(q: string, limit = 24): Promise<ExternalAnimeDto[]> {
     const res = await jget<{ data: JikanAnime[] }>(
-      `/anime?q=${encodeURIComponent(q)}&limit=${limit}&sfw=true&order_by=popularity&sort=desc`,
+      `/anime?q=${encodeURIComponent(q)}&limit=${clampLimit(limit)}&sfw=true&order_by=popularity&sort=desc`,
     );
     return res.data.map(map);
   },
 
   async getPool(limit = 25): Promise<ExternalAnimeDto[]> {
+    const size = clampLimit(limit);
     const [top, popular] = await Promise.all([
-      jget<{ data: JikanAnime[] }>(`/top/anime?limit=${limit}&sfw=true`),
+      jget<{ data: JikanAnime[] }>(`/top/anime?limit=${size}&sfw=true`),
       jget<{ data: JikanAnime[] }>(
-        `/top/anime?filter=bypopularity&limit=${limit}&sfw=true`,
+        `/top/anime?filter=bypopularity&limit=${size}&sfw=true`,
       ),
     ]);
     const seen = new Set<number>();
