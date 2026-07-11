@@ -83,6 +83,78 @@ describe("RecommendationCacheService", () => {
     expect(await svc.getUser("u3")).toBeNull();
   });
 
+  it("stores and retrieves a taste payload under its own key", async () => {
+    const svc = new RecommendationCacheService(makeMemoryCache());
+    await svc.setTaste("u5", {
+      ids: [10, 11],
+      reasons: { 10: [{ type: "genre_similar", label: "Seu gosto" }] },
+      scores: { 10: 0.8 },
+      trending: {},
+    });
+
+    const hit = await svc.getTaste("u5");
+    expect(hit?.ids).toEqual([10, 11]);
+    expect(hit?.reasons[10][0].label).toBe("Seu gosto");
+    // Taste and default feeds use distinct keys — no cross-contamination.
+    expect(await svc.getUser("u5")).toBeNull();
+  });
+
+  it("stores and retrieves a SmartFeeds payload with ordered sections", async () => {
+    const svc = new RecommendationCacheService(makeMemoryCache());
+    await svc.setFeeds("u7", {
+      sections: [
+        {
+          id: "because-watched",
+          title: "Porque você assistiu X",
+          eyebrow: "Continuidade de gosto",
+          source: { animeId: 100, title: "X" },
+          ids: [3, 1],
+          reasons: { 3: [{ type: "genre_similar", label: "Porque X" }] },
+          scores: { 3: 0.8 },
+          trending: { 3: true },
+        },
+      ],
+    });
+
+    const hit = await svc.getFeeds("u7");
+    expect(hit?.sections).toHaveLength(1);
+    expect(hit?.sections[0].id).toBe("because-watched");
+    expect(hit?.sections[0].ids).toEqual([3, 1]);
+    expect(hit?.sections[0].source).toEqual({ animeId: 100, title: "X" });
+    expect(hit?.sections[0].reasons[3][0].label).toBe("Porque X");
+  });
+
+  it("returns null for a malformed feeds entry", async () => {
+    const cache = makeMemoryCache();
+    await cache.set(RecommendationCacheService.KEYS.feeds("u8"), { foo: 1 }, 60);
+    const svc = new RecommendationCacheService(cache);
+    expect(await svc.getFeeds("u8")).toBeNull();
+  });
+
+  it("invalidation clears the default, taste and feeds caches for a user", async () => {
+    const svc = new RecommendationCacheService(makeMemoryCache());
+    await svc.setUser("u6", { ids: [1], reasons: {} });
+    await svc.setTaste("u6", { ids: [2], reasons: {} });
+    await svc.setFeeds("u6", {
+      sections: [
+        {
+          id: "like-favorite",
+          title: "Parecido com Y",
+          eyebrow: "Mesma vibe",
+          source: { animeId: 5, title: "Y" },
+          ids: [9],
+          reasons: {},
+        },
+      ],
+    });
+
+    await svc.invalidateUser("u6");
+
+    expect(await svc.getUser("u6")).toBeNull();
+    expect(await svc.getTaste("u6")).toBeNull();
+    expect(await svc.getFeeds("u6")).toBeNull();
+  });
+
   it("caches pool and trending candidates", async () => {
     const svc = new RecommendationCacheService(makeMemoryCache());
     expect(await svc.getPool()).toBeNull();

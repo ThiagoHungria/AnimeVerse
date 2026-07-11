@@ -19,6 +19,27 @@ export interface CachedReco {
 }
 
 /**
+ * One cached contextual feed section: the display metadata (title/eyebrow/
+ * source) plus the ranked ids and per-anime maps (reasons/scores/trending),
+ * so a hit can be fully rebuilt without recomputing the anchor scoring.
+ */
+export interface CachedFeedSection {
+  id: string;
+  title: string;
+  eyebrow: string;
+  source: { animeId: number; title: string } | null;
+  ids: number[];
+  reasons: Record<number, RecommendationReason[]>;
+  scores?: Record<number, number>;
+  trending?: Record<number, boolean>;
+}
+
+/** Cached SmartFeeds payload: an ordered list of contextual sections. */
+export interface CachedFeeds {
+  sections: CachedFeedSection[];
+}
+
+/**
  * Centralizes recommendation-related caching: key names, TTLs, the per-user
  * result cache and the shared candidate caches (pool + trending) that shield the
  * Jikan API from repeated calls.
@@ -28,9 +49,13 @@ export interface CachedReco {
  */
 @Injectable()
 export class RecommendationCacheService {
-  /** Cache keys. `pool`/`trending` are global; `user` is per user. */
+  /** Cache keys. `pool`/`trending` are global; per-user keys are namespaced. */
   static readonly KEYS = {
     user: (userId: string): string => `reco:${userId}`,
+    /** Genre-heavy "baseado no seu gosto" ranking, cached separately. */
+    taste: (userId: string): string => `reco:taste:${userId}`,
+    /** Contextual anchor-based sections (because-watched / like-favorite). */
+    feeds: (userId: string): string => `reco:feeds:${userId}`,
     pool: "reco:pool",
     trending: "anime:trending",
   } as const;
@@ -70,9 +95,59 @@ export class RecommendationCacheService {
     );
   }
 
-  /** Invalidate a user's recommendations after a taste-changing mutation. */
+  // --- Per-user taste cache (genre-heavy ranking) -------------------------
+
+  async getTaste(userId: string): Promise<CachedReco | null> {
+    const raw = await this.cache.get<CachedReco | number[]>(
+      RecommendationCacheService.KEYS.taste(userId),
+    );
+    return this.normalize(raw);
+  }
+
+  async setTaste(
+    userId: string,
+    payload: CachedReco,
+    ttlSeconds: number = RecommendationCacheService.TTL.user,
+  ): Promise<void> {
+    await this.cache.set(
+      RecommendationCacheService.KEYS.taste(userId),
+      payload,
+      ttlSeconds,
+    );
+  }
+
+  // --- Per-user SmartFeeds cache (contextual sections) --------------------
+
+  async getFeeds(userId: string): Promise<CachedFeeds | null> {
+    const raw = await this.cache.get<CachedFeeds>(
+      RecommendationCacheService.KEYS.feeds(userId),
+    );
+    if (!raw || !Array.isArray(raw.sections)) return null;
+    return raw;
+  }
+
+  async setFeeds(
+    userId: string,
+    payload: CachedFeeds,
+    ttlSeconds: number = RecommendationCacheService.TTL.user,
+  ): Promise<void> {
+    await this.cache.set(
+      RecommendationCacheService.KEYS.feeds(userId),
+      payload,
+      ttlSeconds,
+    );
+  }
+
+  /**
+   * Invalidate every per-user recommendation cache after a taste-changing
+   * mutation (favorite/history). Clears all related keys so no feed stays stale.
+   */
   async invalidateUser(userId: string): Promise<void> {
-    await this.cache.del(RecommendationCacheService.KEYS.user(userId));
+    await Promise.all([
+      this.cache.del(RecommendationCacheService.KEYS.user(userId)),
+      this.cache.del(RecommendationCacheService.KEYS.taste(userId)),
+      this.cache.del(RecommendationCacheService.KEYS.feeds(userId)),
+    ]);
   }
 
   // --- Shared candidate caches --------------------------------------------

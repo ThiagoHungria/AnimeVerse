@@ -253,6 +253,16 @@ export class ApiClient {
     return this.request<AnimeSummaryDto[]>(`/recommendations/${userId}`);
   }
 
+  getTasteRecommendations(userId: string) {
+    return this.request<AnimeSummaryDto[]>(`/recommendations/${userId}/taste`);
+  }
+
+  getSmartFeeds(userId: string) {
+    return this.request<SmartFeedSectionDto[]>(
+      `/recommendations/${userId}/feeds`,
+    );
+  }
+
   // --- Anime (public) ---
   getTrending() {
     return this.request<AnimeSummaryDto[]>("/anime/trending");
@@ -335,6 +345,20 @@ export interface AnimeSummaryDto {
   trending?: boolean;
   /** Optional recommendation explanations (populated only by /recommendations). */
   reasons?: RecommendationReason[];
+}
+
+/**
+ * A contextual SmartFeed section from the backend (`/recommendations/:id/feeds`).
+ * `items` reuse AnimeSummaryDto (slim + reasons/score/trending) and are hydrated
+ * client-side against the discovery pool.
+ */
+export interface SmartFeedSectionDto {
+  id: string;
+  title: string;
+  eyebrow: string;
+  /** The anime this section is anchored on (because-watched / like-favorite). */
+  source?: { animeId: number; title: string };
+  items: AnimeSummaryDto[];
 }
 
 export interface HistoryPayload {

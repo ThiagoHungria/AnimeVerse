@@ -196,3 +196,100 @@ describe("apiClient getRecommendations", () => {
     ]);
   });
 });
+
+describe("apiClient getTasteRecommendations", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("requests the taste endpoint for the user", async () => {
+    const payload = [
+      {
+        id: "2",
+        malId: 2,
+        title: "Taste Anime",
+        description: "",
+        image: "img.png",
+        banner: "banner.png",
+        rating: 7.5,
+        genres: ["Romance"],
+        themes: [],
+        episodeCount: 12,
+        source: "jikan",
+        score: 0.72,
+        reasons: [{ type: "genre_similar", label: "Combina com seu gosto" }],
+      },
+    ];
+
+    const fetchMock = vi.fn().mockResolvedValueOnce(jsonResponse(payload));
+    vi.stubGlobal("fetch", fetchMock);
+
+    const client = new ApiClient();
+    client.setAccessToken("access-token");
+    const result = await client.getTasteRecommendations("user-1");
+
+    expect(fetchMock.mock.calls[0][0]).toBe(
+      `${API_URL}/recommendations/user-1/taste`,
+    );
+    expect(result).toHaveLength(1);
+    expect(result[0].malId).toBe(2);
+    expect(result[0].reasons).toEqual([
+      { type: "genre_similar", label: "Combina com seu gosto" },
+    ]);
+  });
+});
+
+describe("apiClient getSmartFeeds", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("requests the feeds endpoint and returns contextual sections", async () => {
+    const payload = [
+      {
+        id: "because-watched",
+        title: "Porque você assistiu X",
+        eyebrow: "Continuidade de gosto",
+        source: { animeId: 100, title: "X" },
+        items: [
+          {
+            id: "3",
+            malId: 3,
+            title: "Rec",
+            description: "",
+            image: "i.png",
+            banner: "b.png",
+            rating: 8,
+            genres: ["Action"],
+            themes: [],
+            episodeCount: 12,
+            source: "jikan",
+            reasons: [
+              {
+                type: "genre_similar",
+                sourceAnimeId: 100,
+                sourceTitle: "X",
+                label: "Porque você assistiu X",
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const fetchMock = vi.fn().mockResolvedValueOnce(jsonResponse(payload));
+    vi.stubGlobal("fetch", fetchMock);
+
+    const client = new ApiClient();
+    client.setAccessToken("access-token");
+    const result = await client.getSmartFeeds("user-1");
+
+    expect(fetchMock.mock.calls[0][0]).toBe(
+      `${API_URL}/recommendations/user-1/feeds`,
+    );
+    expect(result).toHaveLength(1);
+    expect(result[0].id).toBe("because-watched");
+    expect(result[0].source).toEqual({ animeId: 100, title: "X" });
+    expect(result[0].items[0].reasons?.[0].sourceAnimeId).toBe(100);
+  });
+});

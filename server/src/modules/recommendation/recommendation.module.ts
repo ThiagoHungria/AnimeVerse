@@ -4,6 +4,7 @@ import { RecommendationScoringService } from "../../services/scoring/recommendat
 import { RecommendationCacheService } from "./recommendation-cache.service";
 import { RecommendationController } from "./recommendation.controller";
 import { RecommendationEngineService } from "./recommendation.service";
+import { SmartFeedEngineService } from "./smart-feed-engine.service";
 
 @Module({
   imports: [AnimeModule],
@@ -12,6 +13,7 @@ import { RecommendationEngineService } from "./recommendation.service";
     RecommendationEngineService,
     RecommendationScoringService,
     RecommendationCacheService,
+    SmartFeedEngineService,
   ],
   exports: [RecommendationCacheService],
 })

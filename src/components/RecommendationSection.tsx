@@ -1,15 +1,15 @@
 "use client";
 
-import type { AnimeSummary } from "@/types";
 import { HorizontalCarousel, CarouselItem } from "@/components/HorizontalCarousel";
 import { AnimeCardPremium } from "@/components/AnimeCardPremium";
+import type { RecommendationReasonAwareAnime } from "@/features/recommendations/types";
 import { CarouselSkeleton } from "@/components/ui/LoadingSkeleton";
 
 interface RecommendationSectionProps {
   id?: string;
   title: string;
   eyebrow?: string;
-  animes: AnimeSummary[];
+  animes: RecommendationReasonAwareAnime[];
   loading?: boolean;
 }
 
@@ -35,7 +35,7 @@ export function RecommendationSection({
     <HorizontalCarousel title={title} eyebrow={eyebrow}>
       {animes.map((anime) => (
         <CarouselItem key={anime.id}>
-          <AnimeCardPremium anime={anime} />
+          <AnimeCardPremium anime={anime} reasons={anime.reasons} />
         </CarouselItem>
       ))}
     </HorizontalCarousel>

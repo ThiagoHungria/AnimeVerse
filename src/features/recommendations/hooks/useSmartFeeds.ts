@@ -3,28 +3,30 @@
 import { useMemo } from "react";
 import { useDiscoveryPool } from "@/features/anime/hooks/useAnimeQueries";
 import { useUserBehavior } from "@/features/recommendations/hooks/useUserBehavior";
+import { useBackendSmartFeeds } from "@/features/recommendations/hooks/useBackendSmartFeeds";
 import { useHistoryStore } from "@/store/history.store";
+import { useAuthStore } from "@/store/auth.store";
+import {
+  getRecoSource,
+  selectSmartFeeds,
+  type SmartFeed,
+} from "@/features/recommendations/lib/recommendationSource";
 import {
   recommendBecauseYouWatched,
   recommendProbablyLike,
   recommendHighRatedObscure,
   recommendLike,
 } from "@/services/recommendationEngine";
-import type { AnimeSummary } from "@/types";
 
-export interface SmartFeed {
-  id: string;
-  title: string;
-  eyebrow: string;
-  animes: AnimeSummary[];
-}
+export type { SmartFeed } from "@/features/recommendations/lib/recommendationSource";
 
 export function useSmartFeeds() {
   const { data: pool, isLoading } = useDiscoveryPool();
   const behavior = useUserBehavior();
   const entries = useHistoryStore((s) => s.entries);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
-  const feeds = useMemo((): SmartFeed[] => {
+  const clientFeeds = useMemo((): SmartFeed[] => {
     if (!pool) return [];
 
     const result: SmartFeed[] = [];
@@ -86,5 +88,12 @@ export function useSmartFeeds() {
     return result;
   }, [pool, behavior, entries]);
 
-  return { feeds, isLoading };
+  const backend = useBackendSmartFeeds();
+
+  return selectSmartFeeds({
+    source: getRecoSource(),
+    isAuthenticated,
+    backend,
+    client: { feeds: clientFeeds, isLoading },
+  });
 }

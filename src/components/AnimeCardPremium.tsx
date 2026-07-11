@@ -5,7 +5,9 @@ import Link from "next/link";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Play } from "lucide-react";
 import type { AnimeSummary } from "@/types";
+import type { RecommendationReason } from "@/services/apiClient";
 import { RatingBadge } from "@/components/ui/RatingBadge";
+import { ReasonChip } from "@/features/recommendations/components/ReasonChip";
 import { FavoriteButton } from "@/features/anime/components/FavoriteButton";
 import { useDominantColor } from "@/hooks/useDominantColor";
 import { cn } from "@/utils/cn";
@@ -16,6 +18,8 @@ interface AnimeCardPremiumProps {
   className?: string;
   priority?: boolean;
   rank?: number;
+  /** Optional recommendation explanations; renders a chip only when present. */
+  reasons?: RecommendationReason[];
 }
 
 /** Premium card with dynamic glow, hover scale and 3D tilt. */
@@ -24,6 +28,7 @@ export function AnimeCardPremium({
   className,
   priority,
   rank,
+  reasons,
 }: AnimeCardPremiumProps) {
   const palette = useDominantColor(anime.image, anime.id);
   const x = useMotionValue(0);
@@ -112,6 +117,7 @@ export function AnimeCardPremium({
           <p className="text-muted mt-0.5 line-clamp-1 text-xs">
             {anime.genres.slice(0, 2).join(" · ") || anime.type || "Anime"}
           </p>
+          <ReasonChip reasons={reasons} className="mt-1.5 max-w-full" />
         </div>
       </Link>
     </motion.div>

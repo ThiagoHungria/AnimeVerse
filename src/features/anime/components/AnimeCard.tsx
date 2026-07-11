@@ -5,7 +5,9 @@ import Link from "next/link";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Play } from "lucide-react";
 import type { AnimeSummary } from "@/types";
+import type { RecommendationReason } from "@/services/apiClient";
 import { RatingBadge } from "@/components/ui/RatingBadge";
+import { ReasonChip } from "@/features/recommendations/components/ReasonChip";
 import { FavoriteButton } from "./FavoriteButton";
 import { cn } from "@/utils/cn";
 import { springSnappy } from "@/utils/animation";
@@ -16,6 +18,8 @@ interface AnimeCardProps {
   priority?: boolean;
   /** Enable subtle 3D tilt on hover. */
   tilt?: boolean;
+  /** Optional recommendation explanations; renders a chip only when present. */
+  reasons?: RecommendationReason[];
 }
 
 export function AnimeCard({
@@ -23,6 +27,7 @@ export function AnimeCard({
   className,
   priority,
   tilt = false,
+  reasons,
 }: AnimeCardProps) {
   const topTag = anime.smartTags[0];
   const x = useMotionValue(0);
@@ -95,6 +100,7 @@ export function AnimeCard({
           <p className="text-muted mt-0.5 line-clamp-1 text-xs">
             {anime.genres.slice(0, 2).join(" · ") || anime.type || "Anime"}
           </p>
+          <ReasonChip reasons={reasons} className="mt-1.5 max-w-full" />
         </div>
       </Link>
     </motion.div>

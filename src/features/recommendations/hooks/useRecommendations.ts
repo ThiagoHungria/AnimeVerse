@@ -4,9 +4,11 @@ import { useMemo } from "react";
 import { useDiscoveryPool } from "@/features/anime/hooks/useAnimeQueries";
 import { useUserBehavior } from "@/features/recommendations/hooks/useUserBehavior";
 import { useBackendRecommended } from "@/features/recommendations/hooks/useBackendRecommended";
+import { useBackendTasteBased } from "@/features/recommendations/hooks/useBackendTasteBased";
 import {
   getRecoSource,
   selectRecommended,
+  selectTasteBased,
 } from "@/features/recommendations/lib/recommendationSource";
 import { useAuthStore } from "@/store/auth.store";
 import {
@@ -51,17 +53,23 @@ export function useRecommended(limit = 18) {
 export function useTasteBased(limit = 18) {
   const { data: pool, isLoading } = useDiscoveryPool();
   const behavior = useUserBehavior();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
   const recommendations = useMemo(() => {
     if (!pool) return [];
     return recommendByTaste(pool, behavior, limit);
   }, [pool, behavior, limit]);
 
-  return {
-    recommendations,
-    isLoading,
-    hasTaste: Object.keys(behavior.tasteProfile).length > 0,
-  };
+  const hasTaste = Object.keys(behavior.tasteProfile).length > 0;
+
+  const backend = useBackendTasteBased(limit);
+
+  return selectTasteBased({
+    source: getRecoSource(),
+    isAuthenticated,
+    backend,
+    client: { recommendations, isLoading, hasTaste },
+  });
 }
 
 export function useDiscoveryCollections() {

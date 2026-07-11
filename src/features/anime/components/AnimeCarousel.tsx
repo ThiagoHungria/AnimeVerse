@@ -3,13 +3,13 @@
 import { useRef } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import type { AnimeSummary } from "@/types";
 import { AnimeCard } from "./AnimeCard";
+import type { RecommendationReasonAwareAnime } from "@/features/recommendations/types";
 import { revealUp, staggerContainer, staggerItem } from "@/utils/animation";
 
 interface AnimeCarouselProps {
   title: string;
-  animes: AnimeSummary[];
+  animes: RecommendationReasonAwareAnime[];
   eyebrow?: string;
 }
 
@@ -75,7 +75,7 @@ export function AnimeCarousel({ title, animes, eyebrow }: AnimeCarouselProps) {
             variants={staggerItem}
             className="w-36 shrink-0 snap-start sm:w-40 md:w-44 lg:w-48"
           >
-            <AnimeCard anime={anime} tilt />
+            <AnimeCard anime={anime} reasons={anime.reasons} tilt />
           </motion.div>
         ))}
       </motion.div>

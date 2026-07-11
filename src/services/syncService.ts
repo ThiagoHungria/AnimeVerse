@@ -18,6 +18,7 @@ import { useAuthStore } from "@/store/auth.store";
 import { useFavoritesStore } from "@/store/favorites.store";
 import { useHistoryStore } from "@/store/history.store";
 import { useLibraryStore, type LibraryList } from "@/store/library.store";
+import { useSyncStore } from "@/store/sync.store";
 import type { AnimeSummary, HistoryEntry } from "@/types";
 
 const isMalId = (id: string) => /^\d+$/.test(id);
@@ -37,6 +38,10 @@ export async function syncUserData(): Promise<void> {
     await pullAndMerge();
   } finally {
     syncing = false;
+    // Unblock backend recommendation queries whether the sync succeeded or
+    // failed — a failed sync must never permanently lock the user out; the
+    // reco hooks simply fall back to the client engine when the API errors.
+    useSyncStore.getState().setSyncCompleted(true);
   }
 }
 

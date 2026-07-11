@@ -8,7 +8,10 @@
  */
 
 import { describe, expect, it, vi } from "vitest";
-import { RecommendationEngineService } from "./recommendation.service";
+import {
+  RecommendationEngineService,
+  TASTE_SCORING_WEIGHTS,
+} from "./recommendation.service";
 import type { RecommendationUserData } from "./recommendation.service";
 import { RecommendationScoringService } from "../../services/scoring/recommendation-scoring.service";
 import { RecommendationCacheService } from "./recommendation-cache.service";
@@ -38,6 +41,8 @@ function makeRecoCacheStub(
   return {
     getUser: vi.fn(async () => null),
     setUser: vi.fn(async () => undefined),
+    getTaste: vi.fn(async () => null),
+    setTaste: vi.fn(async () => undefined),
     invalidateUser: vi.fn(async () => undefined),
     getPool: vi.fn(async () => null),
     setPool: vi.fn(async () => undefined),
@@ -319,6 +324,106 @@ describe("RecommendationEngineService — candidate resilience (FASE 2.2-F.2)", 
   });
 });
 
+describe("RecommendationEngineService — durable pool fallback (FASE 2.2-K)", () => {
+  function poolRow(id: number, genres = ["Action"]) {
+    return {
+      id,
+      title: `Durable ${id}`,
+      titleEnglish: null,
+      synopsis: null,
+      image: "poster.png",
+      banner: null,
+      score: 8,
+      rank: null,
+      popularity: 100,
+      genres,
+      themes: [],
+      status: null,
+      episodes: 12,
+      year: null,
+      season: null,
+      type: null,
+    };
+  }
+
+  it("falls back to the persisted Anime pool when cache is cold and Jikan fails", async () => {
+    const poolSpy = vi
+      .spyOn(jikanClient, "getPool")
+      .mockRejectedValue(new Error("Jikan 504: /top/anime"));
+    const trendingSpy = vi
+      .spyOn(jikanClient, "getTrending")
+      .mockRejectedValue(new Error("Jikan 504: /top/anime?filter=airing"));
+    try {
+      const findMany = vi.fn(async () => [poolRow(1), poolRow(2, ["Romance"])]);
+      const prisma = { anime: { findMany } } as unknown as PrismaService;
+      const { engine } = makeEngine(
+        new RecommendationScoringService(),
+        makeRecoCacheStub(),
+        prisma,
+      );
+
+      const candidates = await engine.loadCandidates();
+
+      expect(findMany).toHaveBeenCalledTimes(1);
+      expect(candidates.map((c) => c.id).sort()).toEqual([1, 2]);
+      // The persisted row's metadata survives the DB → external mapping.
+      expect(candidates.find((c) => c.id === 2)?.genres).toEqual(["Romance"]);
+    } finally {
+      poolSpy.mockRestore();
+      trendingSpy.mockRestore();
+    }
+  });
+
+  it("does not touch the DB when the cache/Jikan already provides a pool", async () => {
+    const poolSpy = vi
+      .spyOn(jikanClient, "getPool")
+      .mockResolvedValue([makeCandidate({ id: 1 })]);
+    const trendingSpy = vi
+      .spyOn(jikanClient, "getTrending")
+      .mockResolvedValue([]);
+    try {
+      const findMany = vi.fn(async () => [] as ReturnType<typeof poolRow>[]);
+      const prisma = { anime: { findMany } } as unknown as PrismaService;
+      const { engine } = makeEngine(
+        new RecommendationScoringService(),
+        makeRecoCacheStub(),
+        prisma,
+      );
+
+      await engine.loadCandidates();
+
+      expect(findMany).not.toHaveBeenCalled();
+    } finally {
+      poolSpy.mockRestore();
+      trendingSpy.mockRestore();
+    }
+  });
+
+  it("returns [] when Jikan fails and the durable pool is also empty", async () => {
+    const poolSpy = vi
+      .spyOn(jikanClient, "getPool")
+      .mockRejectedValue(new Error("Jikan 504"));
+    const trendingSpy = vi
+      .spyOn(jikanClient, "getTrending")
+      .mockRejectedValue(new Error("Jikan 504"));
+    try {
+      const prisma = {
+        anime: { findMany: vi.fn(async () => []) },
+      } as unknown as PrismaService;
+      const { engine } = makeEngine(
+        new RecommendationScoringService(),
+        makeRecoCacheStub(),
+        prisma,
+      );
+
+      await expect(engine.loadCandidates()).resolves.toEqual([]);
+    } finally {
+      poolSpy.mockRestore();
+      trendingSpy.mockRestore();
+    }
+  });
+});
+
 describe("RecommendationEngineService — empty candidates (FASE 2.2-F.2)", () => {
   it("scoring yields an empty ranking for an empty candidate set", () => {
     const { engine } = makeEngine();
@@ -466,5 +571,165 @@ describe("RecommendationEngineService — cache hit", () => {
     expect(result[0].reasons).toEqual([]);
     expect(result[0].score).toBeUndefined();
     expect(result[0].trending).toBeUndefined();
+  });
+});
+
+describe("RecommendationEngineService — getTasteForUser (FASE 2.2-G.1)", () => {
+  function tasteRow(id: number) {
+    return {
+      id,
+      title: `Taste ${id}`,
+      titleEnglish: null,
+      synopsis: null,
+      image: null,
+      banner: null,
+      score: 8,
+      rank: null,
+      popularity: null,
+      genres: ["Romance"],
+      themes: [],
+      status: null,
+      episodes: 12,
+      year: null,
+      season: null,
+      type: null,
+    };
+  }
+
+  it("blends with genre-heavy weights: taste genre outranks higher quality", async () => {
+    const recoCache = makeRecoCacheStub({
+      getTaste: vi.fn(async () => null),
+      getTrending: vi.fn(async () => []),
+      getPool: vi.fn(async () => [
+        makeCandidate({ id: 1, genres: ["Action"], score: 9, popularity: 10 }),
+        makeCandidate({ id: 2, genres: ["Romance"], score: 5, popularity: 5000 }),
+      ]),
+    });
+    const prisma = {
+      user: {
+        findUnique: vi.fn(async () =>
+          makeUser({
+            preferences: {
+              preferredGenres: ["Romance"],
+              genreScores: { Romance: 3 },
+            },
+          }),
+        ),
+      },
+    } as unknown as PrismaService;
+    const { engine } = makeEngine(
+      new RecommendationScoringService(),
+      recoCache,
+      prisma,
+    );
+
+    const result = await engine.getTasteForUser("user-1");
+
+    // Romance matches the user's taste and wins despite the lower MAL score.
+    expect(result[0].malId).toBe(2);
+  });
+
+  it("passes the taste weights to the scoring engine", async () => {
+    const scoring = new RecommendationScoringService();
+    const spy = vi.spyOn(scoring, "score");
+    const recoCache = makeRecoCacheStub({
+      getTaste: vi.fn(async () => null),
+      getTrending: vi.fn(async () => []),
+      getPool: vi.fn(async () => [makeCandidate({ id: 1 })]),
+    });
+    const prisma = {
+      user: { findUnique: vi.fn(async () => makeUser()) },
+    } as unknown as PrismaService;
+    const { engine } = makeEngine(scoring, recoCache, prisma);
+
+    await engine.getTasteForUser("user-1");
+
+    expect(spy).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      expect.objectContaining({ weights: TASTE_SCORING_WEIGHTS }),
+    );
+  });
+
+  it("returns the cached taste ranking without recomputing (cache hit)", async () => {
+    const cached: CachedReco = {
+      ids: [5],
+      reasons: { 5: [{ type: "genre_similar", label: "Combina com seu gosto" }] },
+      scores: { 5: 0.91 },
+      trending: { 5: false },
+    };
+    const recoCache = makeRecoCacheStub({
+      getTaste: vi.fn(async () => cached),
+    });
+    const prisma = {
+      anime: { findMany: vi.fn(async () => [tasteRow(5)]) },
+    } as unknown as PrismaService;
+    const { engine } = makeEngine(
+      new RecommendationScoringService(),
+      recoCache,
+      prisma,
+    );
+
+    const result = await engine.getTasteForUser("user-1");
+
+    expect(result).toHaveLength(1);
+    expect(result[0].malId).toBe(5);
+    expect(result[0].score).toBe(0.91);
+    expect(result[0].reasons).toEqual(cached.reasons[5]);
+    // A hit must not touch the candidate pool.
+    expect(recoCache.getPool).not.toHaveBeenCalled();
+  });
+
+  it("computes and persists to the taste cache on a miss", async () => {
+    const recoCache = makeRecoCacheStub({
+      getTaste: vi.fn(async () => null),
+      getTrending: vi.fn(async () => []),
+      getPool: vi.fn(async () => [makeCandidate({ id: 7 })]),
+    });
+    const prisma = {
+      user: { findUnique: vi.fn(async () => makeUser()) },
+    } as unknown as PrismaService;
+    const { engine } = makeEngine(
+      new RecommendationScoringService(),
+      recoCache,
+      prisma,
+    );
+
+    await engine.getTasteForUser("user-1");
+
+    expect(recoCache.setTaste).toHaveBeenCalledTimes(1);
+    const [userIdArg, payload] = (recoCache.setTaste as unknown as {
+      mock: { calls: [string, CachedReco][] };
+    }).mock.calls[0];
+    expect(userIdArg).toBe("user-1");
+    expect(payload.ids).toContain(7);
+  });
+
+  it("returns [] and persists nothing when candidates degrade", async () => {
+    const poolSpy = vi
+      .spyOn(jikanClient, "getPool")
+      .mockRejectedValue(new Error("Jikan 400"));
+    const trendingSpy = vi
+      .spyOn(jikanClient, "getTrending")
+      .mockRejectedValue(new Error("Jikan 400"));
+    try {
+      const recoCache = makeRecoCacheStub({ getTaste: vi.fn(async () => null) });
+      const prisma = {
+        user: { findUnique: vi.fn(async () => makeUser()) },
+      } as unknown as PrismaService;
+      const { engine } = makeEngine(
+        new RecommendationScoringService(),
+        recoCache,
+        prisma,
+      );
+
+      const result = await engine.getTasteForUser("user-1");
+
+      expect(result).toEqual([]);
+      expect(recoCache.setTaste).not.toHaveBeenCalled();
+    } finally {
+      poolSpy.mockRestore();
+      trendingSpy.mockRestore();
+    }
   });
 });

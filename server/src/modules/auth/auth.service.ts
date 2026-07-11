@@ -207,8 +207,14 @@ export class AuthService {
   }
 }
 
-/** Parse simple duration strings like "7d", "900s", "1h". */
-function parseDuration(raw: string): number {
+/**
+ * Parse simple duration strings like "7d", "900s", "1h" into milliseconds.
+ *
+ * Exported for testing. Malformed values (e.g. a stray "7d1") don't match the
+ * strict pattern and fall back to the 7-day default, so a typo never issues a
+ * zero/NaN-lived refresh token.
+ */
+export function parseDuration(raw: string): number {
   const match = raw.match(/^(\d+)([smhd])$/);
   if (!match) return 7 * 24 * 60 * 60 * 1000;
   const n = Number(match[1]);

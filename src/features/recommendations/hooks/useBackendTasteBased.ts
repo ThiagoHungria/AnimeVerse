@@ -11,19 +11,19 @@ import { hydrateRecommendations } from "@/features/recommendations/lib/hydrateRe
 import {
   getRecoSource,
   isBackendRecoEnabled,
-  type RecommendationFeedResult,
+  type TasteFeedResult,
 } from "@/features/recommendations/lib/recommendationSource";
 
 /**
- * Backend-powered "for you" feed. Fetches the ranked recommendations from the
- * API and hydrates them into full display records via the discovery pool.
+ * Backend-powered "baseado no seu gosto" feed. Fetches the genre-heavy ranking
+ * from the API and hydrates it against the discovery pool by `malId`.
  *
  * The query only runs when the backend flag is on AND the user is authenticated,
  * so with the default flag ("client") this hook does no network work and returns
- * an empty, non-loading result — letting the caller fall back to the client
+ * an empty, non-loading result — letting `useTasteBased` fall back to the client
  * engine transparently.
  */
-export function useBackendRecommended(limit = 18): RecommendationFeedResult {
+export function useBackendTasteBased(limit = 18): TasteFeedResult {
   const userId = useAuthStore((s) => s.user?.id);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const isSyncCompleted = useSyncStore((s) => s.isSyncCompleted);
@@ -38,8 +38,8 @@ export function useBackendRecommended(limit = 18): RecommendationFeedResult {
   const behavior = useUserBehavior();
 
   const query = useQuery({
-    queryKey: ["reco", userId, limit],
-    queryFn: () => apiClient.getRecommendations(userId as string),
+    queryKey: ["reco-taste", userId, limit],
+    queryFn: () => apiClient.getTasteRecommendations(userId as string),
     enabled,
     staleTime: 1000 * 60 * 15, // 15 min — aligns with backend cache TTL
     gcTime: 1000 * 60 * 30,
@@ -53,9 +53,7 @@ export function useBackendRecommended(limit = 18): RecommendationFeedResult {
     [query.data, pool, limit],
   );
 
-  const personalized =
-    Object.keys(behavior.tasteProfile).length > 0 ||
-    behavior.watchedAnimeIds.size > 0;
+  const hasTaste = Object.keys(behavior.tasteProfile).length > 0;
 
-  return { recommendations, isLoading: query.isLoading, personalized };
+  return { recommendations, isLoading: query.isLoading, hasTaste };
 }
