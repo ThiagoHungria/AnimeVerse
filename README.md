@@ -10,10 +10,10 @@
   <img src="https://img.shields.io/badge/Tailwind_CSS-0D1117?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
   <img src="https://img.shields.io/badge/React_Query-0D1117?style=flat-square&logo=reactquery&logoColor=white" alt="React Query" />
   <img src="https://img.shields.io/badge/Zustand-0D1117?style=flat-square&logo=react&logoColor=white" alt="Zustand" />
-  <img src="https://img.shields.io/github/license/ThiagoHungria/AnimeVerse?style=flat-square&color=22C55E" alt="License" />
+  <img src="https://img.shields.io/github/license/ThiagoHungria/AnimeVerse?style=flat-square&color=2563EB" alt="License" />
 </p>
 
-<a href="https://anime-verse-khaki.vercel.app"><img src="https://img.shields.io/badge/Live_Demo-22C55E?style=flat-square&logo=vercel&logoColor=white" alt="Live Demo" /></a>
+<a href="https://anime-verse-khaki.vercel.app"><img src="https://img.shields.io/badge/Live_Demo-2563EB?style=flat-square&logo=vercel&logoColor=white" alt="Live Demo" /></a>
 
 </div>
 
