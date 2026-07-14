@@ -1,164 +1,143 @@
-# 🌐 AnimeVerse
+<div align="center">
 
-**Anime discovery engine inteligente com curadoria automatizada.**
+# AnimeVerse
 
-Plataforma de catálogo de animes construída com **Next.js + TypeScript + Tailwind**, alimentada por dados reais do **MyAnimeList** (via **Jikan API**) e com uma **camada de inteligência** própria (recomendações, similaridade por tags, filtros por intenção e tags humanas) por cima da API.
+**An anime discovery engine with a custom recommendation & smart-tagging layer, powered by real MyAnimeList data.**
 
-> Não é "mais um clone de catálogo": é um motor de descoberta com curadoria automática, arquitetura desacoplada de provedores e fallback offline.
+<p>
+  <img src="https://img.shields.io/badge/Next.js-0D1117?style=flat-square&logo=nextdotjs&logoColor=white" alt="Next.js" />
+  <img src="https://img.shields.io/badge/TypeScript-0D1117?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-0D1117?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/React_Query-0D1117?style=flat-square&logo=reactquery&logoColor=white" alt="React Query" />
+  <img src="https://img.shields.io/badge/Zustand-0D1117?style=flat-square&logo=react&logoColor=white" alt="Zustand" />
+  <img src="https://img.shields.io/github/license/ThiagoHungria/AnimeVerse?style=flat-square&color=22C55E" alt="License" />
+</p>
 
-## ✨ Destaques
+<a href="https://anime-verse-khaki.vercel.app"><img src="https://img.shields.io/badge/Live_Demo-22C55E?style=flat-square&logo=vercel&logoColor=white" alt="Live Demo" /></a>
 
-- 🔌 **Dados reais via MAL/Jikan** — populares, em alta, temporada atual, busca, gêneros, recomendações e episódios.
-- 🧠 **Anime Intelligence Layer**
-  - **Tags inteligentes**: transforma `Action + Shounen` em _"Alta adrenalina"_ + _"Protagonista em evolução"_.
-  - **Recomendação personalizada** com base em gêneros, favoritos e histórico de navegação.
-  - **Similar Engine** (animes parecidos) por tags + nota.
-  - **Filtros por intenção**: _Joias escondidas_, _Para maratonar_, _Top subestimados_, _Alta adrenalina_, _Histórias emocionais_, _Narrativas complexas_.
-- 🧱 **Arquitetura desacoplada**: a UI só conhece o `animeService` (facade). Trocar de provedor = trocar 2 arquivos.
-- 🛟 **Fallback resiliente**: se a API cair ou bater rate-limit, o app degrada para um dataset local curado.
-- ⚡ **React Query** com cache agressivo + **rate-limiter** próprio para respeitar os limites do Jikan.
-- ⭐ Favoritos, 📚 histórico e ▶️ "continuar assistindo" (LocalStorage), 🌙 dark mode premium, 📱 PWA-ready.
+</div>
 
-## 🧱 Stack
+---
 
-Next.js 16 (App Router) · TypeScript · Tailwind v4 · Zustand (`persist`) · TanStack React Query · hls.js · lucide-react · **Jikan v4 (MyAnimeList)**.
+## Overview
 
-## 🏗️ Arquitetura em camadas
+AnimeVerse is not "yet another catalog clone". It is a **discovery engine** built on top of real MyAnimeList data (via the Jikan API), with a proprietary **intelligence layer** for recommendations, similarity by tags, intent-based filters and human-readable tags — plus a decoupled provider architecture and an offline fallback.
+
+## Highlights
+
+- **Real data via MAL/Jikan** — trending, seasonal, search, genres, recommendations and episodes.
+- **Anime Intelligence Layer**
+  - **Smart tags** — turns `Action + Shounen` into _"High adrenaline"_ + _"Evolving protagonist"_.
+  - **Personalized recommendations** based on genres, favorites and browsing history.
+  - **Similar engine** (look-alike anime) by tags + score.
+  - **Intent filters** — _Hidden gems_, _Binge-worthy_, _Underrated_, _High adrenaline_, _Emotional stories_, _Complex narratives_.
+- **Decoupled architecture** — the UI only knows `animeService` (a facade). Swapping providers means changing 2 files.
+- **Resilient fallback** — on API failure or rate-limit, the app degrades to a curated local dataset.
+- **React Query** with aggressive caching + a custom **rate-limiter** to respect Jikan limits.
+- Favorites, history and "continue watching" (LocalStorage), premium dark mode, PWA-ready.
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS v4
+- **State:** Zustand (`persist`)
+- **Data:** TanStack React Query · Jikan v4 (MyAnimeList) · optional MAL API v2
+- **UI:** lucide-react · hls.js
+- **Backend (optional):** NestJS + PostgreSQL + Redis (auth, sync, favorites)
+
+## Architecture
+
+The UI never calls a provider directly — everything flows through `animeService` (facade) + React Query.
 
 ```
-                 UI (components / pages)
-                         │   (a UI só conhece o service)
-                         ▼
-   hooks (React Query)  ──►  services/animeService.ts   ← FACADE unificada
-                                   │
-              ┌────────────────────┼─────────────────────┐
-              ▼ (1) primário       ▼ (2) fallback         ▼ (3) offline
-     services/malApi.ts     services/jikanApi.ts   services/fallbackData.ts
-     (MAL oficial, v2,       (Jikan v4 +            (dataset local mapeado)
-      X-MAL-CLIENT-ID)        rate-limit + retry)
-              └────────────────────┬─────────────────────┘
-                                   ▼  cada provider normaliza para →
-                       domain/external.ts  (ExternalAnime, neutro)
-                                   ▼
-                       domain/anime.mapper.ts  → mapExternalAnimeToInternal()
-                       domain/smartTags.ts     → tags inteligentes
-                                   ▲
-                       services/intelligenceEngine.ts
-                       (recomendação · similaridade · ranking próprio · filtros)
+UI (components / pages)
+        │
+   hooks (React Query)
+        │
+   services/animeService.ts   ← unified facade
+        │
+   ┌────────────┬────────────────┬─────────────────┐
+ malApi.ts     jikanApi.ts       fallbackData.ts
+ (MAL v2)      (Jikan v4 +       (local dataset)
+               rate-limit)
+        │
+ domain/external.ts            ← neutral ExternalAnime model
+ domain/anime.mapper.ts        ← maps to internal UI model
+ domain/smartTags.ts           ← human tags
+ services/intelligenceEngine.ts ← recommend · similar · ranking · filters
 ```
 
-Organização **feature-based** + camadas compartilhadas:
+Feature-based organization with shared layers. To swap providers, write a new provider that returns `ExternalAnime` — mapper and UI stay untouched.
 
-```
-src/
-├─ app/                         # rotas (Home, explore, profile, search, anime/[id], watch, favorites, history)
-├─ features/
-│  ├─ anime/                    # components (Card, Carousel, Hero, EpisodeList, ...) + hooks/useAnimeQueries
-│  ├─ recommendations/          # RecommendedRow, HiddenGemsRow + hooks/useRecommendations
-│  ├─ explore/                  # ExploreFilters + hooks/useExplore (discover)
-│  └─ profile/                  # ContinueWatchingRow
-├─ services/
-│  ├─ malApi.ts                 # provider MAL oficial (v2, via client id)
-│  ├─ jikanApi.ts               # provider Jikan (fallback/default)
-│  ├─ animeService.ts           # FACADE unificada (MAL → Jikan → local) + discover()
-│  ├─ intelligenceEngine.ts     # engine de inteligência (recomendação/similar/ranking/filtros)
-│  └─ fallbackData.ts           # dataset local mapeado
-├─ domain/
-│  ├─ external.ts               # ExternalAnime + normalização (status/duração/temporada)
-│  ├─ anime.mapper.ts           # mapExternalAnimeToInternal() / buildAnimeDetail()
-│  └─ smartTags.ts              # taxonomia MAL → tags humanas + heurísticas
-├─ store/                       # favorites / history / profile (Zustand + LocalStorage)
-├─ hooks/, components/{ui,layout,player,pwa,search}, types/, utils/, data/
-```
+## Features
 
-## 🔌 Camada de dados (MAL oficial + Jikan)
+- Personalized recommendations and "hidden gems" rows.
+- Advanced explore filters (genre, year, season, min score, status, type, ordering).
+- Favorites, history and continue-watching, persisted locally.
+- Premium dark UI, PWA-ready, resilient offline fallback.
 
-- **Dois providers**, ambos normalizando para o modelo neutro `ExternalAnime`:
-  - `malApi.ts` — **MyAnimeList API v2** (principal). Ativa quando `NEXT_PUBLIC_MAL_CLIENT_ID` está definido.
-  - `jikanApi.ts` — **Jikan v4** (fallback/padrão), com **rate-limit** (~450ms, < 3 req/s) e **retry com backoff em 429**.
-- `animeService.ts` orquestra a precedência **MAL → Jikan → dataset local** de forma transparente.
-- **Regra de ouro**: nenhum componente chama provider direto — tudo passa pelo `animeService` + React Query (cache agressivo).
+## Getting Started
 
-> Sem `NEXT_PUBLIC_MAL_CLIENT_ID` o app roda 100% via Jikan (sem setup). Para usar a MAL oficial, crie `.env.local` com `NEXT_PUBLIC_MAL_CLIENT_ID=<seu_id>`.
+### Prerequisites
 
-## 🔄 Mapeamento (obrigatório)
+- Node.js 20+
+- (Optional) Docker for the backend (PostgreSQL + Redis)
 
-`domain/anime.mapper.ts` converte o modelo neutro no modelo interno limpo da UI, incluindo as `smartTags`:
-
-```ts
-mapExternalAnimeToInternal(external): AnimeSummary
-buildAnimeDetail(external, episodes): Anime
-```
-
-Trocar de provedor = novo provider que produz `ExternalAnime`. Mapper e UI permanecem intactos.
-
-## 🧠 Anime Intelligence Engine (diferencial)
-
-`services/intelligenceEngine.ts` (funções puras):
-
-- `recommend(pool, tasteProfile, { exclude, limit })` — recomendação personalizada (histórico + favoritos + gêneros).
-- `findSimilar(target, pool)` / `similarityScore()` — similaridade por gênero + tema + nota.
-- `animeVerseScore()` / `rankByAnimeVerseScore()` — **ranking próprio** (nota MAL + popularidade + engajamento + boost de joia escondida).
-- `getHiddenGems()`, `smartFilters`, `buildDiscoveryCollections()` — descoberta por intenção.
-- `generateSmartTags()` — tags humanas (`Action → "Alta adrenalina"`, `Psychological → "Narrativas profundas"`).
-
-O **perfil de gosto** (`store/profile.store.ts`) aprende com favoritos (peso 3), visualizações (peso 1) e gêneros escolhidos no `/profile` (peso 5).
-
-## 🔎 Explore com filtros avançados
-
-`/explore` combina gênero, ano, temporada, nota mínima, status, tipo e ordenação (`features/explore`). Sem filtros ativos, exibe curadoria automática (recomendados + trending + coleções por intenção).
-
-## 🚀 Como rodar
-
-### 1. Configurar ambiente
+### Installation
 
 ```bash
-# Frontend
-cp .env.example .env.local
-
-# Backend (requer Docker para Postgres + Redis)
-cp server/.env.example server/.env
-# Edite JWT_ACCESS_SECRET antes de usar em produção
-```
-
-| Variável | Onde | Obrigatória | Descrição |
-|----------|------|-------------|-----------|
-| `NEXT_PUBLIC_API_URL` | `.env.local` | Para auth/sync | URL da API NestJS |
-| `NEXT_PUBLIC_SITE_URL` | `.env.local` | Não | URL pública do site (SEO/OG) |
-| `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | `.env.local` | Não | Google OAuth (deve coincidir com o backend) |
-| `NEXT_PUBLIC_MAL_CLIENT_ID` | `.env.local` | Não | MAL API oficial; sem ela usa Jikan |
-| `DATABASE_URL` | `server/.env` | Sim (backend) | PostgreSQL |
-| `JWT_ACCESS_SECRET` | `server/.env` | Sim (backend) | Segredo do JWT |
-| `GOOGLE_CLIENT_ID` | `server/.env` | Para Google login | Mesmo ID do frontend |
-| `CORS_ORIGINS` | `server/.env` | Sim (backend) | Origens permitidas (ex.: `http://localhost:3000`) |
-| `REDIS_URL` | `server/.env` | Não | Cache; sem ele usa memória |
-
-### 2. Subir infraestrutura e API (opcional)
-
-Com auth, favoritos, histórico e sync multi-dispositivo:
-
-```bash
-npm run db:up          # Postgres + Redis via Docker
-npm run db:migrate     # aplica migrations Prisma
-npm run dev:server     # API em http://localhost:3001
-```
-
-### 3. Frontend
-
-```bash
+git clone https://github.com/ThiagoHungria/AnimeVerse.git
+cd AnimeVerse
 npm install
-npm run dev      # http://localhost:3000
 ```
 
+### Environment
+
 ```bash
-npm run build    # build de produção
-npm run start    # servir o build
+cp .env.example .env.local
+```
+
+| Variable | Required | Description |
+| --- | --- | --- |
+| `NEXT_PUBLIC_API_URL` | for auth/sync | NestJS API URL |
+| `NEXT_PUBLIC_SITE_URL` | no | Public site URL (SEO/OG) |
+| `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | no | Google OAuth (must match backend) |
+| `NEXT_PUBLIC_MAL_CLIENT_ID` | no | Official MAL API; without it, Jikan is used |
+
+> Without `NEXT_PUBLIC_MAL_CLIENT_ID`, the app runs 100% on Jikan — no setup required.
+
+### Run
+
+```bash
+npm run dev      # http://localhost:3000
+npm run build    # production build
+npm run start    # serve the build
 npm run lint     # lint
 ```
 
-## 📝 Notas
+### Backend (optional)
 
-- **Streaming**: MAL/Jikan não fornece (nem pode) fontes de vídeo. Para manter player, histórico e "continuar assistindo" funcionais, os episódios são mapeados sobre clipes públicos de exemplo. O **trailer real** do anime (YouTube) é exibido na página de detalhes.
-- Imagens vêm do `cdn.myanimelist.net` (e thumbnails de trailer do YouTube); o fallback usa `picsum.photos`. Hosts configurados em `next.config.ts`.
-- Persistência local: `animeverse:favorites`, `animeverse:history`, `animeverse:profile`.
-- Sem chaves de API: o Jikan é público. Para usar a MAL API oficial no futuro, basta criar um novo provider e plugá-lo no `animeService`.
+```bash
+npm run db:up          # Postgres + Redis via Docker
+npm run db:migrate     # apply Prisma migrations
+npm run dev:server     # API on http://localhost:3001
+```
+
+## Deploy
+
+Deployed on **Vercel**: [anime-verse-khaki.vercel.app](https://anime-verse-khaki.vercel.app)
+
+## Notes
+
+- MAL/Jikan does not provide video sources; episodes are mapped over public sample clips so player/history/continue-watching stay functional. The real trailer (YouTube) is shown on the detail page.
+- Images come from `cdn.myanimelist.net` (and YouTube trailer thumbnails); fallback uses `picsum.photos`. Hosts are configured in `next.config.ts`.
+
+## License
+
+Distributed under the MIT License. See [`LICENSE`](LICENSE).
+
+## Author
+
+**Thiago Hungria** — Full Stack Developer
+[GitHub](https://github.com/ThiagoHungria)
